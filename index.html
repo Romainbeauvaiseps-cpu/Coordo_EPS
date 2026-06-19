@@ -1045,6 +1045,25 @@
                     <img src="logo_Navbar/reunion.png" alt="Réunion" class="w-6 h-6 object-contain"> Réunion
                 </button>
             </div>
+
+            <div class="p-4 mt-auto mb-2 border-t border-[var(--border)] relative">
+                <button onclick="toggleGlobalSettingsMenu()" class="w-full flex justify-center items-center p-2 rounded-xl text-[color:var(--text-muted)] hover:text-[color:var(--text-main)] hover:bg-[var(--secondary)] transition-all" title="Réglages">
+                    <i data-lucide="settings" size="20"></i>
+                </button>
+                
+                <div id="globalSettingsMenu" class="hidden absolute bottom-full left-4 mb-2 w-56 glass-card p-2 flex-col gap-2 shadow-xl z-50">
+                    <button onclick="triggerImport()" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[var(--secondary)] text-sm text-[color:var(--text-main)] transition-all text-left">
+                        <i data-lucide="upload" size="16"></i> Charger
+                    </button>
+                    <button onclick="exportAllData()" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[var(--secondary)] text-sm text-[color:var(--text-main)] transition-all text-left">
+                        <i data-lucide="download" size="16"></i> Sauvegarder
+                    </button>
+                    <div class="border-t border-[var(--border)] my-1"></div>
+                    <button onclick="toggleGlobalSettingsMenu()" class="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-500/20 hover:text-red-400 text-sm text-[color:var(--text-muted)] transition-all text-left">
+                        <i data-lucide="x" size="16"></i> Fermer
+                    </button>
+                </div>
+            </div>
         </nav>
 
         <!-- Main Content Area -->
@@ -5550,7 +5569,58 @@
             if (typeof renderProgrammation === 'function') renderProgrammation();
         }
 
+        function toggleGlobalSettingsMenu() {
+            const menu = document.getElementById('globalSettingsMenu');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                menu.classList.add('flex');
+            } else {
+                menu.classList.add('hidden');
+                menu.classList.remove('flex');
+            }
+        }
+
+        function exportAllData() {
+            const dataStr = JSON.stringify(state, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            const exportFileDefaultName = 'coordo_eps_sauvegarde.json';
+
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+            toggleGlobalSettingsMenu();
+        }
+
+        function triggerImport() {
+            document.getElementById('importJsonInput').click();
+            toggleGlobalSettingsMenu();
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedState = JSON.parse(e.target.result);
+                    if (importedState) {
+                        state = { ...state, ...importedState };
+                        saveAppState();
+                        alert('Données importées avec succès ! La page va se recharger.');
+                        window.location.reload();
+                    }
+                } catch (error) {
+                    alert("Erreur lors de l'importation. Fichier invalide.");
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = ''; // Reset input
+        }
+
     </script>
+    <input type="file" id="importJsonInput" accept=".json" style="display: none;" onchange="importData(event)">
 </body>
 
 </html>
