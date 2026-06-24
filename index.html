@@ -1042,6 +1042,10 @@
                     class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl hover:bg-[var(--secondary)] text-[color:var(--text-muted)] hover:text-[color:var(--text-main)] transition-all font-bold text-left">
                     <img src="logo_Navbar/inventaire.png" alt="Inventaire" class="w-6 h-6 object-contain"> Inventaire
                 </button>
+                <button onclick="showPage('commandes'); if(window.innerWidth<1024) toggleSidebar()"
+                    class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl hover:bg-[var(--secondary)] text-[color:var(--text-muted)] hover:text-[color:var(--text-main)] transition-all font-bold text-left">
+                    <i data-lucide="shopping-bag" size="18"></i> Commandes
+                </button>
                 <button onclick="showPage('reunion'); if(window.innerWidth<1024) toggleSidebar()"
                     class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl hover:bg-[var(--secondary)] text-[color:var(--text-muted)] hover:text-[color:var(--text-main)] transition-all font-bold text-left">
                     <img src="logo_Navbar/reunion.png" alt="Réunion" class="w-6 h-6 object-contain"> Réunion
@@ -1153,7 +1157,16 @@
                                         class="w-8 h-8 object-contain">
                                 </div>
                                 <h3 class="text-xl font-extrabold mb-2 text-[color:var(--text-main)]">Inventaire</h3>
-                                <p class="text-sm text-[color:var(--text-muted)]">Matériel et commandes</p>
+                                <p class="text-sm text-[color:var(--text-muted)]">État du parc matériel</p>
+                            </button>
+                            <button onclick="showPage('commandes')"
+                                class="glass-card p-8 group transition-all hover:-translate-y-2 flex flex-col items-center">
+                                <div
+                                    class="w-16 h-16 bg-indigo-500/10 text-indigo-500 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-indigo-500/20 group-hover:scale-110 transition-all">
+                                    <i data-lucide="shopping-bag" size="32"></i>
+                                </div>
+                                <h3 class="text-xl font-extrabold mb-2 text-[color:var(--text-main)]">Commandes</h3>
+                                <p class="text-sm text-[color:var(--text-muted)]">Achats et fournisseurs</p>
                             </button>
                             <button onclick="showPage('reunion')"
                                 class="glass-card p-8 group transition-all hover:-translate-y-2 flex flex-col items-center">
@@ -1350,55 +1363,130 @@
                     </section>
 
                     <section id="inventaire" class="page space-y-6">
-                        <div class="flex justify-between items-center mb-6">
-                            <div class="flex items-center gap-3">
-                                <div class="p-2 bg-orange-600 rounded-lg">
-                                    <i data-lucide="package" class="text-white"></i>
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="flex gap-4">
+                                <div class="p-4 bg-blue-500 rounded-xl shadow-lg">
+                                    <i data-lucide="box" class="text-white" size="32"></i>
                                 </div>
-                                <h2 class="text-2xl font-bold text-orange-400">Inventaire & Commandes</h2>
+                                <div>
+                                    <h2 class="text-3xl font-extrabold text-[color:var(--text-main)] mb-1">Inventaire
+                                        matériel</h2>
+                                    <p class="text-slate-400 text-sm">Gérez l'inventaire et l'état du matériel EPS</p>
+                                </div>
                             </div>
-                            <button onclick="openInventorySettings()"
-                                class="btn-secondary px-4 py-2 rounded-lg flex items-center gap-2">
-                                <i data-lucide="settings" size="18"></i> Enregistrer le matériel existant
+                            <button onclick="openInventoryItemModal()"
+                                class="bg-[#F2784B] hover:bg-[#E06639] text-white px-6 py-2.5 rounded-lg font-bold flex items-center gap-2 shadow-md transition-all">
+                                <i data-lucide="plus" size="20"></i> Ajouter du matériel
                             </button>
                         </div>
 
-                        <div class="glass-card p-6 border-orange-500/20">
-                            <h3 class="text-xl font-bold mb-4 text-white">Saisir l'inventaire</h3>
-                            <div class="flex flex-wrap gap-4 items-end justify-start">
-                                <div class="w-[450px]">
-                                    <label class="text-xs text-slate-400 mb-1 block">Matériel</label>
-                                    <select id="invEquipmentSelect"
-                                        class="w-full h-[42px] bg-slate-800 border border-slate-700 text-white rounded-lg px-4 outline-none focus:border-orange-500">
-                                        <!-- Populated dynamically -->
-                                    </select>
+                        <div class="flex items-center gap-2 mb-8">
+                            <span
+                                class="bg-[#F2784B]/10 text-[#F2784B] text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1">
+                                <i data-lucide="graduation-cap" size="14"></i> Aide
+                            </span>
+                            <span class="text-sm text-slate-400">Découvrir l'inventaire, les états, les seuils d'alerte
+                                et le renouvellement</span>
+                        </div>
+
+                        <!-- Summary Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                            <!-- Card 1: TOTAL ARTICLES -->
+                            <div
+                                class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex justify-between items-start">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Total
+                                        Articles</p>
+                                    <p class="text-3xl font-bold text-blue-500" id="invSummaryTotal">0</p>
                                 </div>
-                                <div class="w-[150px]">
-                                    <label class="text-xs text-slate-400 mb-1 block">État</label>
-                                    <select id="invConditionSelect"
-                                        class="w-full h-[42px] bg-slate-800 border border-slate-700 text-white rounded-lg px-4 outline-none focus:border-orange-500">
-                                        <option value="Neuf">Neuf</option>
-                                        <option value="TB état">TB état</option>
-                                        <option value="Bon état">Bon état</option>
-                                        <option value="Abimé">Abimé</option>
-                                    </select>
+                                <div class="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center">
+                                    <i data-lucide="box" class="text-white" size="20"></i>
                                 </div>
-                                <div class="w-[100px]">
-                                    <label class="text-xs text-slate-400 mb-1 block">Quantité</label>
-                                    <input type="number" id="invQuantityInput" value="1" min="1"
-                                        class="w-full h-[42px] bg-slate-800 border border-slate-700 text-white rounded-lg px-4 outline-none focus:border-orange-500">
+                            </div>
+                            <!-- Card 2: EN BON ÉTAT -->
+                            <div
+                                class="bg-[#F8FDF9] rounded-2xl p-6 shadow-sm border border-green-100 flex justify-between items-start">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">En bon
+                                        état</p>
+                                    <p class="text-3xl font-bold text-[#20B27A]" id="invSummaryGood">0</p>
                                 </div>
-                                <button onclick="addInventoryEntry()"
-                                    class="btn-primary bg-orange-600 hover:bg-orange-500 shadow-orange-600/20 px-6 py-2 rounded-lg flex items-center gap-2 h-[42px]">
-                                    <i data-lucide="plus" size="18"></i> Ajouter
-                                </button>
+                                <div class="w-10 h-10 rounded-xl bg-[#20B27A] flex items-center justify-center">
+                                    <i data-lucide="check-circle-2" class="text-white" size="20"></i>
+                                </div>
+                            </div>
+                            <!-- Card 3: DÉGRADÉS / HS -->
+                            <div
+                                class="bg-[#FFF8F8] rounded-2xl p-6 shadow-sm border border-red-100 flex justify-between items-start">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Dégradés /
+                                        HS</p>
+                                    <p class="text-3xl font-bold text-[#EF4444]" id="invSummaryBad">0</p>
+                                </div>
+                                <div class="w-10 h-10 rounded-xl bg-[#EF4444] flex items-center justify-center">
+                                    <i data-lucide="x-circle" class="text-white" size="20"></i>
+                                </div>
+                            </div>
+                            <!-- Card 4: À RENOUVELER -->
+                            <div
+                                class="bg-[#FFFDF8] rounded-2xl p-6 shadow-sm border border-orange-100 flex justify-between items-start">
+                                <div>
+                                    <p class="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">À
+                                        renouveler</p>
+                                    <p class="text-3xl font-bold text-[#F59E0B]" id="invSummaryRenew">0</p>
+                                </div>
+                                <div class="w-10 h-10 rounded-xl bg-[#F59E0B] flex items-center justify-center">
+                                    <i data-lucide="refresh-cw" class="text-white" size="20"></i>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="glass-card p-0 overflow-hidden mt-6">
-                            <div class="p-4 border-b border-[var(--border)]">
-                                <h3 class="text-xl font-bold text-[color:var(--text-main)]">État du parc matériel</h3>
+                        <!-- Search and Filters -->
+                        <div class="mb-6 space-y-4">
+                            <div class="relative max-w-md">
+                                <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                                    size="20"></i>
+                                <input type="text" id="invSearchInput" placeholder="Rechercher du matériel..."
+                                    oninput="renderInventory()"
+                                    class="w-full pl-12 pr-4 py-3 bg-white border border-slate-200 rounded-xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
                             </div>
+                            <div class="flex flex-wrap gap-2" id="invFilterChipsContainer">
+                                <button onclick="setInvFilter('Tous')"
+                                    class="px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 bg-[#1E293B] text-white transition-colors"
+                                    id="filterChip-Tous">
+                                    Tous <span class="bg-white/20 px-2 py-0.5 rounded-full text-xs"
+                                        id="invFilterCount-Tous">0</span>
+                                </button>
+                                <button onclick="setInvFilter('Bon état')"
+                                    class="px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors"
+                                    id="filterChip-Bon">
+                                    Bon <span class="bg-slate-200 px-2 py-0.5 rounded-full text-xs text-slate-600"
+                                        id="invFilterCount-Bon">0</span>
+                                </button>
+                                <button onclick="setInvFilter('Usé')"
+                                    class="px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors"
+                                    id="filterChip-Usé">
+                                    Usé <span class="bg-slate-200 px-2 py-0.5 rounded-full text-xs text-slate-600"
+                                        id="invFilterCount-Usé">0</span>
+                                </button>
+                                <button onclick="setInvFilter('Dégradé')"
+                                    class="px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors"
+                                    id="filterChip-Dégradé">
+                                    Dégradé <span class="bg-slate-200 px-2 py-0.5 rounded-full text-xs text-slate-600"
+                                        id="invFilterCount-Dégradé">0</span>
+                                </button>
+                                <button onclick="setInvFilter('Hors service')"
+                                    class="px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors"
+                                    id="filterChip-Hors">
+                                    Hors service <span
+                                        class="bg-slate-200 px-2 py-0.5 rounded-full text-xs text-slate-600"
+                                        id="invFilterCount-Hors">0</span>
+                                </button>
+                            </div>
+                            <p class="text-sm text-slate-500" id="invResultsCountText">0 articles trouvés</p>
+                        </div>
+
+                        <div id="invTableContainer" class="glass-card p-0 overflow-hidden mt-6 hidden">
                             <div class="overflow-x-auto">
                                 <table class="w-full text-left border-collapse text-sm">
                                     <thead>
@@ -1411,26 +1499,20 @@
                                                 class="p-4 font-semibold text-slate-500 uppercase tracking-wider text-xs">
                                                 Matériel</th>
                                             <th
-                                                class="p-4 font-semibold text-[color:var(--status-neuf)] uppercase tracking-wider text-xs text-center">
-                                                Neuf</th>
-                                            <th
-                                                class="p-4 font-semibold text-[color:var(--status-tb)] uppercase tracking-wider text-xs text-center">
-                                                TB état</th>
-                                            <th
-                                                class="p-4 font-semibold text-[color:var(--status-bon)] uppercase tracking-wider text-xs text-center">
+                                                class="p-4 font-semibold text-[#20B27A] uppercase tracking-wider text-xs text-center">
                                                 Bon état</th>
                                             <th
-                                                class="p-4 font-semibold text-[color:var(--status-abime)] uppercase tracking-wider text-xs text-center">
-                                                Abimé</th>
+                                                class="p-4 font-semibold text-blue-500 uppercase tracking-wider text-xs text-center">
+                                                Usé</th>
+                                            <th
+                                                class="p-4 font-semibold text-[#F59E0B] uppercase tracking-wider text-xs text-center">
+                                                Dégradé</th>
+                                            <th
+                                                class="p-4 font-semibold text-[#EF4444] uppercase tracking-wider text-xs text-center">
+                                                Hors service</th>
                                             <th
                                                 class="p-4 font-semibold text-slate-500 uppercase tracking-wider text-xs text-center">
-                                                Utilisable</th>
-                                            <th
-                                                class="p-4 font-semibold text-slate-500 uppercase tracking-wider text-xs text-center">
-                                                Objectif</th>
-                                            <th
-                                                class="p-4 font-semibold text-slate-500 uppercase tracking-wider text-xs text-center">
-                                                À Commander</th>
+                                                Total</th>
                                             <th
                                                 class="p-4 font-semibold text-slate-500 uppercase tracking-wider text-xs text-center">
                                                 Actions</th>
@@ -1443,7 +1525,17 @@
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 xl:grid-cols-[1fr_1.5fr] gap-6 mt-6">
+                        <!-- Empty State -->
+                        <div id="invEmptyState" class="flex flex-col items-center justify-center py-16 text-center">
+                            <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mb-4">
+                                <i data-lucide="box" class="text-slate-400" size="32"></i>
+                            </div>
+                            <h3 class="text-xl font-bold text-[color:var(--text-main)] mb-2">Aucun matériel trouvé</h3>
+                            <p class="text-slate-500 max-w-sm">Aucun article ne correspond à vos filtres actuels.
+                                Essayez de modifier vos critères.</p>
+                        </div>
+
+                        <div class="mt-6">
 
                             <div class="glass-card p-6 bg-[var(--bg-input)] border-[var(--border)] flex flex-col h-fit">
                                 <div
@@ -1465,259 +1557,132 @@
                                 </ul>
                             </div>
 
-                            <!-- New Section: Passer une commande -->
-                            <div class="glass-card p-6 border-[var(--border)] flex flex-col h-fit">
+                        </div>
+
+                        <!-- MODAL INVENTORY ITEM -->
+                        <div id="inventoryItemModal"
+                            class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden justify-center items-center z-[100] p-4">
+                            <div
+                                class="bg-white w-full max-w-lg rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
                                 <div
-                                    class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-                                    <h3 class="text-xl font-bold text-indigo-400 flex items-center gap-2">
-                                        <i data-lucide="shopping-bag" size="24"></i> Passer une commande
-                                    </h3>
-                                </div>
-
-                                <!-- External Shops Links -->
-                                <div
-                                    class="inline-flex items-center gap-4 mb-6 bg-[var(--bg-input)] p-3 rounded-lg border border-[var(--border)] flex-wrap w-fit">
-                                    <span class="text-sm font-bold text-[color:var(--text-main)]">Boutiques en ligne
-                                        :</span>
-                                    <a href="https://www.decathlonpro.fr" target="_blank"
-                                        class="h-10 w-32 bg-white rounded-lg transition-transform hover:scale-105 shadow-md overflow-hidden flex items-center justify-center p-1.5 border border-slate-200">
-                                        <img src="logo_boutique/Decathlon.jpg" alt="DecathlonPro"
-                                            class="h-full w-full object-contain">
-                                    </a>
-                                    <a href="https://www.casalsport.com" target="_blank"
-                                        class="h-10 w-32 bg-white rounded-lg transition-transform hover:scale-105 shadow-md overflow-hidden flex items-center justify-center p-1.5 border border-slate-200">
-                                        <img src="logo_boutique/Casal.jpeg" alt="CasalSport"
-                                            class="h-full w-full object-contain">
-                                    </a>
-                                    <a href="https://www.equip-eps.fr" target="_blank"
-                                        class="h-10 w-32 bg-white rounded-lg transition-transform hover:scale-105 shadow-md overflow-hidden flex items-center justify-center p-1.5 border border-slate-200">
-                                        <img src="logo_boutique/EquipEPS.png" alt="L'EquipeEPS"
-                                            class="h-full w-full object-contain">
-                                    </a>
-                                </div>
-
-                                <!-- Button to open order menu -->
-                                <button onclick="document.getElementById('orderFormMenu').classList.toggle('hidden')"
-                                    class="btn-primary bg-indigo-600 hover:bg-indigo-500 shadow-indigo-600/20 px-6 py-2 rounded-lg flex items-center gap-2 mb-6">
-                                    <i data-lucide="plus-circle" size="18"></i> Créer une commande
-                                </button>
-
-                                <!-- Order Menu (Hidden by default) -->
-                                <div id="orderFormMenu"
-                                    class="hidden bg-[var(--bg-input)] p-6 rounded-lg border border-[var(--border)] mb-6">
-
-                                    <!-- Supplier Selection (Radio Group) -->
-                                    <div class="mb-6 pb-6 border-b border-[var(--border)]">
-                                        <label
-                                            class="text-sm font-bold text-[color:var(--text-main)] mb-4 block uppercase tracking-wider">Fournisseur
-                                            :</label>
-                                        <div class="flex flex-wrap gap-6">
-                                            <label class="cursor-pointer flex flex-col items-center gap-3">
-                                                <div
-                                                    class="h-12 w-32 bg-white rounded-lg shadow-md hover:shadow-lg transition-all overflow-hidden flex items-center justify-center p-1.5 border border-slate-200">
-                                                    <img src="logo_boutique/Decathlon.jpg" alt="DecathlonPro"
-                                                        class="h-full w-full object-contain">
-                                                </div>
-                                                <input type="radio" name="newOrderSupplier" value="Decathlon Pro"
-                                                    class="w-5 h-5 cursor-pointer accent-blue-500" checked>
-                                            </label>
-                                            <label class="cursor-pointer flex flex-col items-center gap-3">
-                                                <div
-                                                    class="h-12 w-32 bg-white rounded-lg shadow-md hover:shadow-lg transition-all overflow-hidden flex items-center justify-center p-1.5 border border-slate-200">
-                                                    <img src="logo_boutique/Casal.jpeg" alt="CasalSport"
-                                                        class="h-full w-full object-contain">
-                                                </div>
-                                                <input type="radio" name="newOrderSupplier" value="CasalSport"
-                                                    class="w-5 h-5 cursor-pointer accent-red-500">
-                                            </label>
-                                            <label class="cursor-pointer flex flex-col items-center gap-3">
-                                                <div
-                                                    class="h-12 w-32 bg-white rounded-lg shadow-md hover:shadow-lg transition-all overflow-hidden flex items-center justify-center p-1.5 border border-slate-200">
-                                                    <img src="logo_boutique/EquipEPS.png" alt="L'EquipeEPS"
-                                                        class="h-full w-full object-contain">
-                                                </div>
-                                                <input type="radio" name="newOrderSupplier" value="EquipEPS"
-                                                    class="w-5 h-5 cursor-pointer accent-emerald-500">
-                                            </label>
-                                        </div>
+                                    class="p-6 border-b border-slate-100 flex justify-between items-start bg-white sticky top-0 z-10">
+                                    <div>
+                                        <h2 class="text-xl font-bold text-slate-800" id="invModalTitle">Nouveau matériel
+                                        </h2>
+                                        <p class="text-sm text-slate-500">Ajoutez un article à l'inventaire</p>
                                     </div>
-
-                                    <div class="flex flex-wrap gap-4 items-end">
-                                        <div class="flex-1 min-w-[200px]">
-                                            <label
-                                                class="text-sm font-bold text-[color:var(--text-main)] mb-2 block">Intitulé
-                                                du matériel</label>
-                                            <input type="text" id="newOrderName"
-                                                class="w-full h-[42px] bg-[var(--bg-card)] border border-[var(--border)] text-[color:var(--text-main)] rounded-lg px-3 outline-none focus:border-indigo-500 text-sm"
-                                                placeholder="Ex: Ballons de basket">
-                                        </div>
-                                        <div class="w-[140px]">
-                                            <label
-                                                class="text-sm font-bold text-[color:var(--text-main)] mb-2 block">Référence</label>
-                                            <input type="text" id="newOrderRef"
-                                                class="w-full h-[42px] bg-[var(--bg-card)] border border-[var(--border)] text-[color:var(--text-main)] rounded-lg px-3 outline-none focus:border-indigo-500 text-sm"
-                                                placeholder="Réf.">
-                                        </div>
-                                        <div class="w-[130px]">
-                                            <label
-                                                class="text-sm font-bold text-[color:var(--text-main)] mb-2 block">Prix
-                                                unitaire TTC</label>
-                                            <div class="relative">
-                                                <input type="number" id="newOrderPrice" step="0.01" min="0" value="0.00"
-                                                    oninput="calculateOrderLineTotal()"
-                                                    class="w-full h-[42px] bg-[var(--bg-card)] border border-[var(--border)] text-[color:var(--text-main)] rounded-lg pl-3 pr-8 outline-none focus:border-indigo-500 text-sm text-right">
-                                                <span
-                                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-[color:var(--text-muted)]">€</span>
-                                            </div>
-                                        </div>
-                                        <div class="w-[100px]">
-                                            <label
-                                                class="text-sm font-bold text-[color:var(--text-main)] mb-2 block">Quantité</label>
-                                            <select id="newOrderQty" onchange="calculateOrderLineTotal()"
-                                                class="w-full h-[42px] bg-[var(--bg-card)] border border-[var(--border)] text-[color:var(--text-main)] rounded-lg px-3 outline-none focus:border-indigo-500 text-sm text-center">
-                                            </select>
-                                            <script>
-                                                const qtySelect = document.getElementById('newOrderQty');
-                                                for (let i = 0; i <= 100; i++) {
-                                                    qtySelect.add(new Option(i, i));
-                                                }
-                                                qtySelect.value = "1";
-                                            </script>
-                                        </div>
-                                        <div class="w-[120px] flex flex-col justify-end h-[42px] pb-2">
-                                            <span
-                                                class="text-sm font-bold text-[color:var(--text-main)] mb-2 block">Total
-                                                ligne</span>
-                                            <span id="newOrderLineTotal" class="text-xl font-black text-indigo-500">0.00
-                                                €</span>
-                                        </div>
-                                        <button onclick="addOrderLine()"
-                                            class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-lg h-[42px] flex items-center justify-center font-bold shadow-md transition-colors">
-                                            Valider
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- Current Order Table -->
-                                <div id="currentOrderSection" class="hidden">
-                                    <div class="overflow-x-auto rounded-lg border border-[var(--border)] mb-4">
-                                        <table class="w-full text-left border-collapse text-sm">
-                                            <thead>
-                                                <tr class="bg-[var(--bg-input)] text-[color:var(--text-main)]">
-                                                    <th class="p-3 border-b border-[var(--border)]">Fournisseur</th>
-                                                    <th class="p-3 border-b border-[var(--border)]">Intitulé</th>
-                                                    <th class="p-3 border-b border-[var(--border)]">Référence</th>
-                                                    <th class="p-3 border-b border-[var(--border)] text-right">Prix
-                                                        Unitaire</th>
-                                                    <th class="p-3 border-b border-[var(--border)] text-center">Quantité
-                                                    </th>
-                                                    <th class="p-3 border-b border-[var(--border)] text-right">Total
-                                                    </th>
-                                                    <th class="p-3 border-b border-[var(--border)] text-center">Actions
-                                                    </th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="currentOrderTableBody">
-                                                <!-- Populated dynamically -->
-                                            </tbody>
-                                            <tfoot>
-                                                <tr
-                                                    class="bg-[var(--bg-input)] font-bold text-[color:var(--text-main)]">
-                                                    <td colspan="5"
-                                                        class="p-3 border-t border-[var(--border)] text-right uppercase tracking-wider text-xs text-slate-500">
-                                                        Total de la commande</td>
-                                                    <td class="p-3 border-t border-[var(--border)] text-right text-indigo-500 text-lg"
-                                                        id="currentOrderTotalSum">0.00 €</td>
-                                                    <td class="p-3 border-t border-[var(--border)]"></td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-
-                                    <div class="flex justify-end gap-3 mt-4">
-                                        <button onclick="cancelCurrentOrder()"
-                                            class="px-4 py-2 bg-[var(--secondary)] hover:brightness-110 text-[color:var(--text-main)] font-bold rounded-lg transition-all">
-                                            Annuler
-                                        </button>
-                                        <button onclick="saveCurrentOrder()"
-                                            class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-colors flex items-center gap-2">
-                                            <i data-lucide="save" size="18"></i> Enregistrer
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- Saved Orders List -->
-                                <div class="mt-8 border-t border-[var(--border)] pt-6">
-                                    <h4
-                                        class="text-sm font-bold text-[color:var(--text-muted)] uppercase tracking-wider mb-4">
-                                        Commandes enregistrées
-                                    </h4>
-                                    <div id="savedOrdersContainer" class="flex flex-wrap gap-3">
-                                        <!-- Populated dynamically -->
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div> <!-- Close Grid Container -->
-
-                        <!-- MODAL EDIT INVENTORY ITEM -->
-                        <div id="editInventoryItemModal"
-                            class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm hidden justify-center items-center z-[100]">
-                            <div class="glass-card w-full max-w-md p-6 border-blue-500/30">
-                                <div class="flex justify-between items-center mb-6">
-                                    <h2 class="text-xl font-bold text-white">Modifier le matériel</h2>
-                                    <button onclick="closeEditInventoryItemModal()"
-                                        class="text-slate-400 hover:text-white transition-colors">
-                                        <i data-lucide="x" size="24"></i>
+                                    <button onclick="closeInventoryItemModal()"
+                                        class="text-slate-400 hover:text-slate-600 transition-colors bg-slate-50 hover:bg-slate-100 p-2 rounded-full">
+                                        <i data-lucide="x" size="20"></i>
                                     </button>
                                 </div>
 
-                                <input type="hidden" id="editInvId">
+                                <div class="p-6 overflow-y-auto space-y-5 bg-slate-50/50">
+                                    <input type="hidden" id="invModalId">
 
-                                <div class="space-y-4">
                                     <div>
-                                        <label class="text-xs text-slate-400 mb-1 block">Nom du matériel</label>
-                                        <input type="text" id="editInvName"
-                                            class="w-full h-[42px] bg-slate-800 border border-slate-700 text-white rounded-lg px-4 outline-none focus:border-blue-500">
+                                        <label class="text-sm font-bold text-slate-700 mb-1.5 block">Nom *</label>
+                                        <input type="text" id="invModalName" placeholder="Ex : Ballons de basket"
+                                            class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm transition-all">
+                                    </div>
+
+                                    <div>
+                                        <label class="text-sm font-bold text-slate-700 mb-1.5 block">Catégorie</label>
+                                        <input type="text" id="invModalCategory" placeholder="Ex : Ballons"
+                                            class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm transition-all">
+                                    </div>
+
+                                    <div>
+                                        <label class="text-sm font-bold text-slate-700 mb-3 block">Quantité par
+                                            état</label>
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                                                <label class="text-xs font-bold text-[#20B27A] mb-2 block">Bon
+                                                    état</label>
+                                                <div class="relative">
+                                                    <input type="number" id="invModalBon" min="0" value="0"
+                                                        oninput="updateInvModalTotal()"
+                                                        class="w-full h-10 bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3 outline-none focus:border-[#20B27A] text-left">
+                                                </div>
+                                            </div>
+                                            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                                                <label class="text-xs font-bold text-blue-500 mb-2 block">Usé</label>
+                                                <div class="relative">
+                                                    <input type="number" id="invModalUse" min="0" value="0"
+                                                        oninput="updateInvModalTotal()"
+                                                        class="w-full h-10 bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3 outline-none focus:border-blue-500 text-left">
+                                                </div>
+                                            </div>
+                                            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                                                <label
+                                                    class="text-xs font-bold text-[#F59E0B] mb-2 block">Dégradé</label>
+                                                <div class="relative">
+                                                    <input type="number" id="invModalDegrade" min="0" value="0"
+                                                        oninput="updateInvModalTotal()"
+                                                        class="w-full h-10 bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3 outline-none focus:border-[#F59E0B] text-left">
+                                                </div>
+                                            </div>
+                                            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                                                <label class="text-xs font-bold text-[#EF4444] mb-2 block">Hors
+                                                    service</label>
+                                                <div class="relative">
+                                                    <input type="number" id="invModalHs" min="0" value="0"
+                                                        oninput="updateInvModalTotal()"
+                                                        class="w-full h-10 bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3 outline-none focus:border-[#EF4444] text-left">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <p class="text-sm text-slate-500 mt-2 font-medium" id="invModalTotalText">Total
+                                            : <span class="font-bold text-slate-800">0</span> unités</p>
+                                    </div>
+
+                                    <div>
+                                        <label class="text-sm font-bold text-slate-700 mb-1.5 block">Objectif
+                                            mini</label>
+                                        <select id="invModalTarget"
+                                            class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm transition-all">
+                                        </select>
                                     </div>
 
                                     <div class="grid grid-cols-2 gap-4">
                                         <div>
-                                            <label class="text-xs text-emerald-500 mb-1 block">Neuf</label>
-                                            <input type="number" id="editInvNeuf" min="0"
-                                                class="w-full h-[42px] bg-slate-800 border border-slate-700 text-white rounded-lg px-4 outline-none focus:border-emerald-500 text-center">
+                                            <label class="text-sm font-bold text-slate-700 mb-1.5 block">Lieu de
+                                                stockage</label>
+                                            <input type="text" id="invModalLocation" placeholder="Ex : Gymnase A"
+                                                class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm transition-all">
                                         </div>
                                         <div>
-                                            <label class="text-xs text-teal-400 mb-1 block">TB état</label>
-                                            <input type="number" id="editInvTB" min="0"
-                                                class="w-full h-[42px] bg-slate-800 border border-slate-700 text-white rounded-lg px-4 outline-none focus:border-teal-400 text-center">
-                                        </div>
-                                        <div>
-                                            <label class="text-xs text-blue-400 mb-1 block">Bon état</label>
-                                            <input type="number" id="editInvBon" min="0"
-                                                class="w-full h-[42px] bg-slate-800 border border-slate-700 text-white rounded-lg px-4 outline-none focus:border-blue-400 text-center">
-                                        </div>
-                                        <div>
-                                            <label class="text-xs text-red-500 mb-1 block">Abimé</label>
-                                            <input type="number" id="editInvAbime" min="0"
-                                                class="w-full h-[42px] bg-slate-800 border border-slate-700 text-white rounded-lg px-4 outline-none focus:border-red-500 text-center">
+                                            <label
+                                                class="text-sm font-bold text-slate-700 mb-1.5 block">Fournisseur</label>
+                                            <input type="text" id="invModalSupplier" placeholder="Ex : Decathlon Pro"
+                                                class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm transition-all">
                                         </div>
                                     </div>
 
-                                    <div>
-                                        <label class="text-xs text-slate-400 mb-1 block">Objectif (Quantité
-                                            idéale)</label>
-                                        <input type="number" id="editInvTarget" min="0"
-                                            class="w-full h-[42px] bg-slate-800 border border-slate-700 text-white rounded-lg px-4 outline-none focus:border-blue-500 text-center">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label
+                                                class="text-sm font-bold text-slate-700 mb-1.5 block">Référence</label>
+                                            <input type="text" id="invModalReference" placeholder="Ex : REF-RAQ-001"
+                                                class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm transition-all">
+                                        </div>
+                                        <div>
+                                            <label class="text-sm font-bold text-slate-700 mb-1.5 block">Date
+                                                d'achat</label>
+                                            <input type="date" id="invModalDate"
+                                                class="w-full h-11 bg-white border border-slate-200 text-slate-500 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm transition-all">
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="mt-6 flex justify-end gap-3">
-                                    <button onclick="closeEditInventoryItemModal()"
-                                        class="px-4 py-2 text-slate-300 hover:text-white transition-colors">Annuler</button>
-                                    <button onclick="saveEditedInventoryItem()"
-                                        class="btn-primary bg-blue-600 hover:bg-blue-500 px-6 py-2 rounded-lg shadow-blue-600/20">Enregistrer</button>
+                                <div
+                                    class="p-6 border-t border-slate-100 bg-white flex justify-start gap-3 mt-auto sticky bottom-0 z-10">
+                                    <button onclick="saveInventoryItem()" id="invModalSaveBtn"
+                                        class="bg-[#F2784B] hover:bg-[#E06639] text-white px-6 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-md shadow-orange-500/20 transition-all">
+                                        <i data-lucide="plus" size="18"></i> Ajouter
+                                    </button>
+                                    <button onclick="closeInventoryItemModal()"
+                                        class="px-6 py-2.5 text-slate-600 font-bold hover:bg-slate-100 rounded-xl transition-colors">Annuler</button>
                                 </div>
                             </div>
                         </div>
@@ -1757,6 +1722,210 @@
                                     <p>Application Coordo EPS</p>
                                 </div>
                             </div>
+                        </div>
+                    </section>
+
+                    <section id="commandes" class="page space-y-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-indigo-600 rounded-lg">
+                                    <i data-lucide="shopping-bag" class="text-white"></i>
+                                </div>
+                                <h2 class="text-2xl font-bold text-indigo-400">Commandes</h2>
+                            </div>
+                        </div>
+
+                        <!-- Passer une commande -->
+                        <div class="glass-card p-6 border-[var(--border)] flex flex-col h-fit">
+                            <div
+                                class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+                                <h3 class="text-xl font-bold text-indigo-400 flex items-center gap-2">
+                                    <i data-lucide="shopping-bag" size="24"></i> Passer une commande
+                                </h3>
+                            </div>
+
+                            <!-- External Shops Links and Create Order Button -->
+                            <div class="flex flex-wrap items-center gap-6 mb-6">
+                                <div
+                                    class="inline-flex items-center gap-4 bg-[var(--bg-input)] p-3 rounded-lg border border-[var(--border)] flex-wrap w-fit">
+                                    <span class="text-sm font-bold text-[color:var(--text-main)]">Boutiques en ligne
+                                        :</span>
+                                    <a href="https://www.decathlonpro.fr" target="_blank"
+                                        class="h-10 w-32 bg-white rounded-lg transition-transform hover:scale-105 shadow-md overflow-hidden flex items-center justify-center p-1.5 border border-slate-200">
+                                        <img src="logo_boutique/Decathlon.jpg" alt="DecathlonPro"
+                                            class="h-full w-full object-contain">
+                                    </a>
+                                    <a href="https://www.casalsport.com" target="_blank"
+                                        class="h-10 w-32 bg-white rounded-lg transition-transform hover:scale-105 shadow-md overflow-hidden flex items-center justify-center p-1.5 border border-slate-200">
+                                        <img src="logo_boutique/Casal.jpeg" alt="CasalSport"
+                                            class="h-full w-full object-contain">
+                                    </a>
+                                    <a href="https://www.equip-eps.fr" target="_blank"
+                                        class="h-10 w-32 bg-white rounded-lg transition-transform hover:scale-105 shadow-md overflow-hidden flex items-center justify-center p-1.5 border border-slate-200">
+                                        <img src="logo_boutique/EquipEPS.png" alt="L'EquipeEPS"
+                                            class="h-full w-full object-contain">
+                                    </a>
+                                </div>
+
+                                <!-- Button to open order menu -->
+                                <button onclick="document.getElementById('orderFormMenu').classList.toggle('hidden')"
+                                    class="btn-primary bg-indigo-600 hover:bg-indigo-500 shadow-indigo-600/20 px-6 py-2 rounded-lg flex items-center gap-2 h-12">
+                                    <i data-lucide="plus-circle" size="18"></i> Créer une commande
+                                </button>
+                            </div>
+
+                            <!-- Order Menu (Hidden by default) -->
+                            <div id="orderFormMenu"
+                                class="hidden bg-[var(--bg-input)] p-6 rounded-lg border border-[var(--border)] mb-6">
+
+                                <!-- Supplier Selection (Radio Group) -->
+                                <div class="mb-6 pb-6 border-b border-[var(--border)]">
+                                    <label
+                                        class="text-sm font-bold text-[color:var(--text-main)] mb-4 block uppercase tracking-wider">Fournisseur
+                                        :</label>
+                                    <div class="flex flex-wrap gap-6">
+                                        <label class="cursor-pointer flex flex-col items-center gap-3">
+                                            <div
+                                                class="h-12 w-32 bg-white rounded-lg shadow-md hover:shadow-lg transition-all overflow-hidden flex items-center justify-center p-1.5 border border-slate-200">
+                                                <img src="logo_boutique/Decathlon.jpg" alt="DecathlonPro"
+                                                    class="h-full w-full object-contain">
+                                            </div>
+                                            <input type="radio" name="newOrderSupplier" value="Decathlon Pro"
+                                                class="w-5 h-5 cursor-pointer accent-blue-500" checked>
+                                        </label>
+                                        <label class="cursor-pointer flex flex-col items-center gap-3">
+                                            <div
+                                                class="h-12 w-32 bg-white rounded-lg shadow-md hover:shadow-lg transition-all overflow-hidden flex items-center justify-center p-1.5 border border-slate-200">
+                                                <img src="logo_boutique/Casal.jpeg" alt="CasalSport"
+                                                    class="h-full w-full object-contain">
+                                            </div>
+                                            <input type="radio" name="newOrderSupplier" value="CasalSport"
+                                                class="w-5 h-5 cursor-pointer accent-red-500">
+                                        </label>
+                                        <label class="cursor-pointer flex flex-col items-center gap-3">
+                                            <div
+                                                class="h-12 w-32 bg-white rounded-lg shadow-md hover:shadow-lg transition-all overflow-hidden flex items-center justify-center p-1.5 border border-slate-200">
+                                                <img src="logo_boutique/EquipEPS.png" alt="L'EquipeEPS"
+                                                    class="h-full w-full object-contain">
+                                            </div>
+                                            <input type="radio" name="newOrderSupplier" value="EquipEPS"
+                                                class="w-5 h-5 cursor-pointer accent-emerald-500">
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-wrap gap-4 items-end">
+                                    <div class="flex-1 min-w-[200px]">
+                                        <label
+                                            class="text-sm font-bold text-[color:var(--text-main)] mb-2 block">Intitulé
+                                            du matériel</label>
+                                        <input type="text" id="newOrderName"
+                                            class="w-full h-[42px] bg-[var(--bg-card)] border border-[var(--border)] text-[color:var(--text-main)] rounded-lg px-3 outline-none focus:border-indigo-500 text-sm"
+                                            placeholder="Ex: Ballons de basket">
+                                    </div>
+                                    <div class="w-[140px]">
+                                        <label
+                                            class="text-sm font-bold text-[color:var(--text-main)] mb-2 block">Référence</label>
+                                        <input type="text" id="newOrderRef"
+                                            class="w-full h-[42px] bg-[var(--bg-card)] border border-[var(--border)] text-[color:var(--text-main)] rounded-lg px-3 outline-none focus:border-indigo-500 text-sm"
+                                            placeholder="Réf.">
+                                    </div>
+                                    <div class="w-[130px]">
+                                        <label class="text-sm font-bold text-[color:var(--text-main)] mb-2 block">Prix
+                                            unitaire TTC</label>
+                                        <div class="relative">
+                                            <input type="number" id="newOrderPrice" step="0.01" min="0" value="0.00"
+                                                oninput="calculateOrderLineTotal()"
+                                                class="w-full h-[42px] bg-[var(--bg-card)] border border-[var(--border)] text-[color:var(--text-main)] rounded-lg pl-3 pr-8 outline-none focus:border-indigo-500 text-sm text-right">
+                                            <span
+                                                class="absolute right-3 top-1/2 -translate-y-1/2 text-[color:var(--text-muted)]">€</span>
+                                        </div>
+                                    </div>
+                                    <div class="w-[100px]">
+                                        <label
+                                            class="text-sm font-bold text-[color:var(--text-main)] mb-2 block">Quantité</label>
+                                        <select id="newOrderQty" onchange="calculateOrderLineTotal()"
+                                            class="w-full h-[42px] bg-[var(--bg-card)] border border-[var(--border)] text-[color:var(--text-main)] rounded-lg px-3 outline-none focus:border-indigo-500 text-sm text-center">
+                                        </select>
+                                        <script>
+                                            const qtySelect = document.getElementById('newOrderQty');
+                                            for (let i = 0; i <= 100; i++) {
+                                                qtySelect.add(new Option(i, i));
+                                            }
+                                            qtySelect.value = "1";
+                                        </script>
+                                    </div>
+                                    <div class="w-[120px] flex flex-col justify-end h-[42px] pb-2">
+                                        <span class="text-sm font-bold text-[color:var(--text-main)] mb-2 block">Total
+                                            ligne</span>
+                                        <span id="newOrderLineTotal" class="text-xl font-black text-indigo-500">0.00
+                                            €</span>
+                                    </div>
+                                    <button onclick="addOrderLine()"
+                                        class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-lg h-[42px] flex items-center justify-center font-bold shadow-md transition-colors">
+                                        Valider
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Current Order Table -->
+                            <div id="currentOrderSection" class="hidden">
+                                <div class="overflow-x-auto rounded-lg border border-[var(--border)] mb-4">
+                                    <table class="w-full text-left border-collapse text-sm">
+                                        <thead>
+                                            <tr class="bg-[var(--bg-input)] text-[color:var(--text-main)]">
+                                                <th class="p-3 border-b border-[var(--border)]">Fournisseur</th>
+                                                <th class="p-3 border-b border-[var(--border)]">Intitulé</th>
+                                                <th class="p-3 border-b border-[var(--border)]">Référence</th>
+                                                <th class="p-3 border-b border-[var(--border)] text-right">Prix
+                                                    Unitaire</th>
+                                                <th class="p-3 border-b border-[var(--border)] text-center">Quantité
+                                                </th>
+                                                <th class="p-3 border-b border-[var(--border)] text-right">Total
+                                                </th>
+                                                <th class="p-3 border-b border-[var(--border)] text-center">Actions
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="currentOrderTableBody">
+                                            <!-- Populated dynamically -->
+                                        </tbody>
+                                        <tfoot>
+                                            <tr class="bg-[var(--bg-input)] font-bold text-[color:var(--text-main)]">
+                                                <td colspan="5"
+                                                    class="p-3 border-t border-[var(--border)] text-right uppercase tracking-wider text-xs text-slate-500">
+                                                    Total de la commande</td>
+                                                <td class="p-3 border-t border-[var(--border)] text-right text-indigo-500 text-lg"
+                                                    id="currentOrderTotalSum">0.00 €</td>
+                                                <td class="p-3 border-t border-[var(--border)]"></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                                <div class="flex justify-end gap-3 mt-4">
+                                    <button onclick="cancelCurrentOrder()"
+                                        class="px-4 py-2 bg-[var(--secondary)] hover:brightness-110 text-[color:var(--text-main)] font-bold rounded-lg transition-all">
+                                        Annuler
+                                    </button>
+                                    <button onclick="saveCurrentOrder()"
+                                        class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-lg transition-colors flex items-center gap-2">
+                                        <i data-lucide="save" size="18"></i> Enregistrer
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Saved Orders List -->
+                            <div class="mt-8 border-t border-[var(--border)] pt-6">
+                                <h4
+                                    class="text-sm font-bold text-[color:var(--text-muted)] uppercase tracking-wider mb-4">
+                                    Commandes enregistrées
+                                </h4>
+                                <div id="savedOrdersContainer" class="flex flex-wrap gap-3">
+                                    <!-- Populated dynamically -->
+                                </div>
+                            </div>
+
                         </div>
                     </section>
 
@@ -4562,81 +4731,153 @@
             closeSharedClassesModal();
         }
 
-        // --- INVENTAIRE & COMMANDES ---
-        function openInventorySettings() {
-            document.getElementById('inventorySettingsModal').classList.remove('hidden');
-            renderInventoryConfigList();
-        }
+        // --- INVENTAIRE ---
+        let invCurrentFilter = 'Tous';
 
-        function closeInventorySettings() {
-            document.getElementById('inventorySettingsModal').classList.add('hidden');
-        }
+        function setInvFilter(filter) {
+            invCurrentFilter = filter;
+            // Update chip styles
+            const chips = document.querySelectorAll('[id^="filterChip-"]');
+            chips.forEach(chip => {
+                const idFilter = chip.id.replace('filterChip-', '');
+                const isMatch = (filter === 'Hors service' && idFilter === 'Hors') || idFilter === filter;
 
-        function addInventoryConfig() {
-            const category = document.getElementById('newInvCategory').value.trim();
-            const name = document.getElementById('newInvName').value.trim();
-            const target = parseInt(document.getElementById('newInvTarget').value) || 0;
-            if (category && name) {
-                state.inventoryConfig.push({ id: Date.now(), category, name, target });
-                document.getElementById('newInvName').value = '';
-                saveAppState();
-                renderInventoryConfigList();
-                populateInventorySelects();
-                renderInventory();
-            }
-        }
-
-        function deleteInventoryConfig(id) {
-            state.inventoryConfig = state.inventoryConfig.filter(c => c.id !== id);
-            state.inventory = state.inventory.filter(i => i.configId !== id);
-            saveAppState();
-            renderInventoryConfigList();
-            populateInventorySelects();
+                if (isMatch) {
+                    chip.className = 'px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 bg-[#1E293B] text-white transition-colors';
+                    const countSpan = chip.querySelector('span');
+                    if (countSpan) countSpan.className = 'bg-white/20 px-2 py-0.5 rounded-full text-xs';
+                } else {
+                    chip.className = 'px-4 py-1.5 rounded-full text-sm font-bold flex items-center gap-2 bg-slate-100 text-slate-500 hover:bg-slate-200 transition-colors';
+                    const countSpan = chip.querySelector('span');
+                    if (countSpan) countSpan.className = 'bg-slate-200 px-2 py-0.5 rounded-full text-xs text-slate-600';
+                }
+            });
             renderInventory();
         }
 
-        function renderInventoryConfigList() {
-            const container = document.getElementById('inventoryConfigList');
-            container.innerHTML = state.inventoryConfig.map(c => `
-                <div class="flex justify-between items-center bg-slate-800 p-3 rounded-lg border border-slate-700 text-sm">
-                    <div class="text-white">
-                        <span class="font-bold text-orange-400 mr-2">[${c.category}]</span> ${c.name}
-                        <span class="ml-4 px-2 py-1 bg-slate-900 rounded text-slate-400 text-xs border border-slate-700">Objectif: ${c.target}</span>
-                    </div>
-                    <button onclick="deleteInventoryConfig(${c.id})" class="text-slate-500 hover:text-red-400 transition-colors">
-                        <i data-lucide="trash-2" size="18"></i>
-                    </button>
-                </div>
-            `).join('');
+        function openInventoryItemModal(id = null) {
+            const modal = document.getElementById('inventoryItemModal');
+            document.getElementById('invModalId').value = id || '';
+
+            const targetSelect = document.getElementById('invModalTarget');
+            if (targetSelect && targetSelect.options.length === 0) {
+                for (let i = 0; i <= 100; i++) {
+                    targetSelect.add(new Option(i, i));
+                }
+            }
+
+            if (id) {
+                const config = state.inventoryConfig.find(c => c.id === id);
+                document.getElementById('invModalTitle').innerText = 'Modifier le matériel';
+                document.getElementById('invModalTarget').value = config.target || 0;
+                document.getElementById('invModalName').value = config.name || '';
+                document.getElementById('invModalCategory').value = config.category || '';
+                document.getElementById('invModalLocation').value = config.location || '';
+                document.getElementById('invModalSupplier').value = config.supplier || '';
+                document.getElementById('invModalReference').value = config.reference || '';
+                document.getElementById('invModalDate').value = config.purchaseDate || '';
+
+                const entries = state.inventory.filter(i => i.configId === id);
+                document.getElementById('invModalBon').value = entries.find(e => e.condition === 'Bon état')?.quantity || 0;
+                document.getElementById('invModalUse').value = entries.find(e => e.condition === 'Usé')?.quantity || 0;
+                document.getElementById('invModalDegrade').value = entries.find(e => e.condition === 'Dégradé')?.quantity || 0;
+                document.getElementById('invModalHs').value = entries.find(e => e.condition === 'Hors service')?.quantity || 0;
+                document.getElementById('invModalSaveBtn').innerHTML = '<i data-lucide="save" size="18"></i> Enregistrer';
+            } else {
+                document.getElementById('invModalTitle').innerText = 'Nouveau matériel';
+                document.getElementById('invModalTarget').value = 0;
+                document.getElementById('invModalName').value = '';
+                document.getElementById('invModalCategory').value = '';
+                document.getElementById('invModalLocation').value = '';
+                document.getElementById('invModalSupplier').value = '';
+                document.getElementById('invModalReference').value = '';
+                document.getElementById('invModalDate').value = '';
+
+                document.getElementById('invModalBon').value = 0;
+                document.getElementById('invModalUse').value = 0;
+                document.getElementById('invModalDegrade').value = 0;
+                document.getElementById('invModalHs').value = 0;
+                document.getElementById('invModalSaveBtn').innerHTML = '<i data-lucide="plus" size="18"></i> Ajouter';
+            }
+
+            updateInvModalTotal();
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
             lucide.createIcons();
         }
 
-        function populateInventorySelects() {
-            const select = document.getElementById('invEquipmentSelect');
-            if (!select) return;
-            select.innerHTML = state.inventoryConfig.map(c => `
-                <option value="${c.id}">[${c.category}] ${c.name}</option>
-            `).join('');
+        function closeInventoryItemModal() {
+            const modal = document.getElementById('inventoryItemModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
         }
 
-        function addInventoryEntry() {
-            const configId = parseInt(document.getElementById('invEquipmentSelect').value);
-            const condition = document.getElementById('invConditionSelect').value;
-            const quantity = parseInt(document.getElementById('invQuantityInput').value) || 1;
+        function updateInvModalTotal() {
+            const bon = parseInt(document.getElementById('invModalBon').value) || 0;
+            const use = parseInt(document.getElementById('invModalUse').value) || 0;
+            const degrade = parseInt(document.getElementById('invModalDegrade').value) || 0;
+            const hs = parseInt(document.getElementById('invModalHs').value) || 0;
+            const total = bon + use + degrade + hs;
+            document.getElementById('invModalTotalText').innerHTML = `Total : <span class="font-bold text-slate-800">${total}</span> unités`;
+        }
 
-            if (configId) {
-                const existing = state.inventory.find(i => i.configId === configId && i.condition === condition);
-                if (existing) {
-                    existing.quantity += quantity;
-                } else {
-                    state.inventory.push({ id: Date.now(), configId, condition, quantity });
+        function saveInventoryItem() {
+            const idVal = document.getElementById('invModalId').value;
+            const isEdit = idVal !== '';
+            const id = isEdit ? parseInt(idVal) : Date.now();
+
+            const name = document.getElementById('invModalName').value.trim();
+            if (!name) {
+                alert("Veuillez saisir un nom pour le matériel.");
+                return;
+            }
+
+            const category = document.getElementById('invModalCategory').value.trim();
+            const location = document.getElementById('invModalLocation').value.trim();
+            const supplier = document.getElementById('invModalSupplier').value.trim();
+            const reference = document.getElementById('invModalReference').value.trim();
+            const purchaseDate = document.getElementById('invModalDate').value;
+            const target = parseInt(document.getElementById('invModalTarget').value) || 0;
+
+            const bon = parseInt(document.getElementById('invModalBon').value) || 0;
+            const use = parseInt(document.getElementById('invModalUse').value) || 0;
+            const degrade = parseInt(document.getElementById('invModalDegrade').value) || 0;
+            const hs = parseInt(document.getElementById('invModalHs').value) || 0;
+
+            if (isEdit) {
+                const config = state.inventoryConfig.find(c => c.id === id);
+                if (config) {
+                    config.name = name;
+                    config.category = category;
+                    config.location = location;
+                    config.supplier = supplier;
+                    config.reference = reference;
+                    config.purchaseDate = purchaseDate;
+                    config.target = target;
                 }
+            } else {
+                state.inventoryConfig.push({ id, name, category, location, supplier, reference, purchaseDate, target });
+            }
+
+            // Mettre à jour l'inventaire
+            state.inventory = state.inventory.filter(i => i.configId !== id);
+            if (bon > 0) state.inventory.push({ id: Date.now() + 1, configId: id, condition: 'Bon état', quantity: bon });
+            if (use > 0) state.inventory.push({ id: Date.now() + 2, configId: id, condition: 'Usé', quantity: use });
+            if (degrade > 0) state.inventory.push({ id: Date.now() + 3, configId: id, condition: 'Dégradé', quantity: degrade });
+            if (hs > 0) state.inventory.push({ id: Date.now() + 4, configId: id, condition: 'Hors service', quantity: hs });
+
+            saveAppState();
+            closeInventoryItemModal();
+            renderInventory();
+        }
+
+        function deleteInventoryConfigWithConfirm(id) {
+            showCustomConfirm("Voulez-vous vraiment supprimer ce matériel de l'inventaire ?", "Suppression Inventaire", () => {
+                state.inventoryConfig = state.inventoryConfig.filter(c => c.id !== id);
+                state.inventory = state.inventory.filter(i => i.configId !== id);
                 saveAppState();
                 renderInventory();
-
-                // Reset input
-                document.getElementById('invQuantityInput').value = 1;
-            }
+            });
         }
 
         function renderInventory() {
@@ -4644,27 +4885,69 @@
             if (!inventairePage || !inventairePage.classList.contains('active')) return;
 
             const tbody = document.getElementById('inventoryTableBody');
+            const searchVal = (document.getElementById('invSearchInput').value || '').toLowerCase();
+            const tableContainer = document.getElementById('invTableContainer');
+            const emptyState = document.getElementById('invEmptyState');
             const orderList = document.getElementById('orderList');
+
+            let totalItems = 0;
+            let totalGood = 0;
+            let totalBad = 0;
+            let totalRenew = 0;
+
+            let filterCounts = { 'Tous': 0, 'Bon état': 0, 'Usé': 0, 'Dégradé': 0, 'Hors service': 0 };
 
             let html = '';
             let orderHtml = '';
+            let filteredItemsCount = 0;
 
-            // Regrouper par catégorie
-            const categories = [...new Set(state.inventoryConfig.map(c => c.category))];
+            // Group by category
+            const categories = [...new Set(state.inventoryConfig.map(c => c.category || 'Sans catégorie'))].sort();
 
             categories.forEach(cat => {
-                const items = state.inventoryConfig.filter(c => c.category === cat);
-                items.forEach((item, idx) => {
+                let itemsInCategory = state.inventoryConfig.filter(c => (c.category || 'Sans catégorie') === cat);
+
+                // Filter by search
+                if (searchVal) {
+                    itemsInCategory = itemsInCategory.filter(c =>
+                        (c.name && c.name.toLowerCase().includes(searchVal)) ||
+                        (c.category && c.category.toLowerCase().includes(searchVal)) ||
+                        (c.reference && c.reference.toLowerCase().includes(searchVal)) ||
+                        (c.supplier && c.supplier.toLowerCase().includes(searchVal))
+                    );
+                }
+
+                let catHtml = '';
+                let itemsShown = 0;
+
+                itemsInCategory.forEach((item) => {
                     const entries = state.inventory.filter(i => i.configId === item.id);
-                    const neuf = entries.find(e => e.condition === 'Neuf')?.quantity || 0;
-                    const tb = entries.find(e => e.condition === 'TB état')?.quantity || 0;
-                    const bon = entries.find(e => e.condition === 'Bon état')?.quantity || 0;
-                    const abime = entries.find(e => e.condition === 'Abimé')?.quantity || 0;
-                    const totalUsable = neuf + tb + bon;
-                    const toOrder = Math.max(0, item.target - totalUsable);
+                    // Support legacy conditions as well
+                    const legacyNeuf = entries.find(e => e.condition === 'Neuf')?.quantity || 0;
+                    const legacyTb = entries.find(e => e.condition === 'TB état')?.quantity || 0;
+                    const legacyAbime = entries.find(e => e.condition === 'Abimé')?.quantity || 0;
 
+                    const bon = (entries.find(e => e.condition === 'Bon état')?.quantity || 0) + legacyNeuf + legacyTb;
+                    const use = entries.find(e => e.condition === 'Usé')?.quantity || 0;
+                    const degrade = (entries.find(e => e.condition === 'Dégradé')?.quantity || 0) + legacyAbime;
+                    const hs = entries.find(e => e.condition === 'Hors service')?.quantity || 0;
+                    const total = bon + use + degrade + hs;
+
+                    // Compute global stats
+                    totalItems += total;
+                    totalGood += bon + use;
+                    totalBad += degrade + hs;
+                    totalRenew += degrade + hs;
+
+                    filterCounts['Tous'] += total;
+                    filterCounts['Bon état'] += bon;
+                    filterCounts['Usé'] += use;
+                    filterCounts['Dégradé'] += degrade;
+                    filterCounts['Hors service'] += hs;
+
+                    // Order suggestions logic
+                    const toOrder = Math.max(0, (item.target || 0) - (bon + use));
                     const isDismissed = (state.dismissedOrders || []).includes(item.id);
-
                     if (toOrder > 0 && !isDismissed) {
                         orderHtml += `
                         <li class="flex items-center justify-between py-1.5 border-b border-slate-700/50 last:border-0 group">
@@ -4675,41 +4958,91 @@
                         </li>`;
                     }
 
-                    html += `
-                        <tr class="border-b border-[var(--border)] hover:bg-[var(--secondary)]/10 transition-colors group">
-                            ${idx === 0 ? `<td rowspan="${items.length}" class="p-4 align-top font-bold text-slate-500">${cat}</td>` : ''}
-                            <td class="p-4 font-bold text-[color:var(--text-main)]">
-                                ${item.name}
-                            </td>
-                            <td class="p-4 text-center font-bold text-[color:var(--status-neuf)]">${neuf > 0 ? neuf : '-'}</td>
-                            <td class="p-4 text-center font-bold text-[color:var(--status-tb)]">${tb > 0 ? tb : '-'}</td>
-                            <td class="p-4 text-center font-bold text-[color:var(--status-bon)]">${bon > 0 ? bon : '-'}</td>
-                            <td class="p-4 text-center font-bold text-[color:var(--status-abime)]">${abime > 0 ? abime : '-'}</td>
-                            <td class="p-4 text-center font-bold text-[color:var(--text-main)] bg-[var(--secondary)]/5">${totalUsable}</td>
-                            <td class="p-4 text-center text-slate-500">${item.target}</td>
-                            <td class="p-4 text-center font-bold ${toOrder > 0 ? 'text-[color:var(--text-main)] bg-[var(--secondary)]/10' : 'text-slate-400'}">${toOrder > 0 ? '+' + toOrder : '✓ OK'}</td>
-                            <td class="p-4 text-center">
-                                <div class="flex justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all">
-                                    <button onclick="openEditInventoryItem(${item.id})" class="text-slate-400 hover:text-[color:var(--text-main)] transition-colors" title="Modifier">
-                                        <i data-lucide="edit-2" size="18"></i>
-                                    </button>
-                                    <button onclick="deleteInventoryConfigWithConfirm(${item.id})" class="text-slate-400 hover:text-red-400 transition-colors" title="Supprimer">
-                                        <i data-lucide="trash-2" size="18"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
+                    // Filter by condition chip
+                    let showItem = false;
+                    if (invCurrentFilter === 'Tous') showItem = true;
+                    else if (invCurrentFilter === 'Bon état' && bon > 0) showItem = true;
+                    else if (invCurrentFilter === 'Usé' && use > 0) showItem = true;
+                    else if (invCurrentFilter === 'Dégradé' && degrade > 0) showItem = true;
+                    else if (invCurrentFilter === 'Hors service' && hs > 0) showItem = true;
+
+                    if (showItem) {
+                        filteredItemsCount++;
+                        itemsShown++;
+
+                        // Construct the subtitle with location, supplier, reference, date
+                        let subtitleParts = [];
+                        if (item.location) subtitleParts.push(`<i data-lucide="map-pin" size="12" class="inline"></i> ${item.location}`);
+                        if (item.supplier) subtitleParts.push(`<i data-lucide="shopping-cart" size="12" class="inline"></i> ${item.supplier}`);
+                        if (item.reference) subtitleParts.push(`<i data-lucide="tag" size="12" class="inline"></i> Réf: ${item.reference}`);
+                        if (item.purchaseDate) {
+                            const d = new Date(item.purchaseDate);
+                            subtitleParts.push(`<i data-lucide="calendar" size="12" class="inline"></i> ${d.toLocaleDateString('fr-FR')}`);
+                        }
+
+                        const subtitleHtml = subtitleParts.length > 0
+                            ? `<div class="text-xs font-normal text-slate-400 mt-1.5 flex flex-wrap gap-x-3 gap-y-1">${subtitleParts.join('')}</div>`
+                            : '';
+
+                        catHtml += `
+                            <tr class="border-b border-[var(--border)] hover:bg-[var(--secondary)]/10 transition-colors group">
+                                <td class="p-4 font-bold text-slate-500">{CATEGORY_PLACEHOLDER}</td>
+                                <td class="p-4">
+                                    <div class="font-bold text-[color:var(--text-main)]">${item.name}</div>
+                                    ${subtitleHtml}
+                                </td>
+                                <td class="p-4 text-center font-bold text-[#20B27A]">${bon > 0 ? bon : '-'}</td>
+                                <td class="p-4 text-center font-bold text-blue-500">${use > 0 ? use : '-'}</td>
+                                <td class="p-4 text-center font-bold text-[#F59E0B]">${degrade > 0 ? degrade : '-'}</td>
+                                <td class="p-4 text-center font-bold text-[#EF4444]">${hs > 0 ? hs : '-'}</td>
+                                <td class="p-4 text-center font-bold text-[color:var(--text-main)] bg-[var(--secondary)]/5">${total}</td>
+                                <td class="p-4 text-center">
+                                    <div class="flex justify-center gap-3 opacity-0 group-hover:opacity-100 transition-all">
+                                        <button onclick="openInventoryItemModal(${item.id})" class="text-slate-400 hover:text-[color:var(--text-main)] transition-colors" title="Modifier">
+                                            <i data-lucide="edit-2" size="18"></i>
+                                        </button>
+                                        <button onclick="deleteInventoryConfigWithConfirm(${item.id})" class="text-slate-400 hover:text-red-400 transition-colors" title="Supprimer">
+                                            <i data-lucide="trash-2" size="18"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    }
                 });
+
+                if (itemsShown > 0) {
+                    catHtml = catHtml.replace('<td class="p-4 font-bold text-slate-500">{CATEGORY_PLACEHOLDER}</td>', `<td rowspan="${itemsShown}" class="p-4 align-top font-bold text-slate-500">${cat}</td>`);
+                    catHtml = catHtml.replace(/<td class="p-4 font-bold text-slate-500">\{CATEGORY_PLACEHOLDER\}<\/td>/g, '');
+                    html += catHtml;
+                }
             });
 
-            if (html === '') {
-                html = `<tr><td colspan="10" class="p-8 text-center text-slate-500 italic">Aucun matériel configuré. Cliquez sur "Enregistrer le matériel existant" pour commencer.</td></tr>`;
+            // Update Counters DOM
+            document.getElementById('invSummaryTotal').innerText = totalItems;
+            document.getElementById('invSummaryGood').innerText = totalGood;
+            document.getElementById('invSummaryBad').innerText = totalBad;
+            document.getElementById('invSummaryRenew').innerText = totalRenew;
+
+            document.getElementById('invFilterCount-Tous').innerText = filterCounts['Tous'];
+            document.getElementById('invFilterCount-Bon').innerText = filterCounts['Bon état'];
+            document.getElementById('invFilterCount-Usé').innerText = filterCounts['Usé'];
+            document.getElementById('invFilterCount-Dégradé').innerText = filterCounts['Dégradé'];
+            document.getElementById('invFilterCount-Hors').innerText = filterCounts['Hors service'];
+
+            document.getElementById('invResultsCountText').innerText = `${filteredItemsCount} article${filteredItemsCount > 1 ? 's' : ''} trouvé${filteredItemsCount > 1 ? 's' : ''}`;
+
+            if (filteredItemsCount > 0) {
+                tbody.innerHTML = html;
+                if (tableContainer) tableContainer.classList.remove('hidden');
+                if (emptyState) emptyState.classList.add('hidden');
+            } else {
+                tbody.innerHTML = '';
+                if (tableContainer) tableContainer.classList.add('hidden');
+                if (emptyState) emptyState.classList.remove('hidden');
             }
 
-            tbody.innerHTML = html;
-
-            // Add manual orders to list
+            // Order suggestions logic rendering
             (state.manualOrders || []).forEach(mo => {
                 orderHtml += `
                 <li class="flex items-center justify-between py-1.5 border-b border-slate-700/50 last:border-0 group">
@@ -4723,80 +5056,14 @@
             if (orderHtml === '' && state.inventoryConfig.length > 0) orderHtml = '<li class="text-emerald-400 font-bold flex items-center gap-2 text-sm py-2"><i data-lucide="check-circle" size="16"></i> Aucune commande nécessaire. Le stock est complet !</li>';
             else if (state.inventoryConfig.length === 0) orderHtml = '<li class="text-slate-500 italic text-sm py-2">Configurez du matériel pour voir les suggestions de commande.</li>';
 
-            orderList.innerHTML = orderHtml;
+            if (orderList) orderList.innerHTML = orderHtml;
+
             lucide.createIcons();
         }
 
-        function deleteInventoryConfigWithConfirm(id) {
-            showCustomConfirm("Voulez-vous vraiment supprimer ce matériel de l'inventaire ?", "Suppression Inventaire", () => {
-                deleteInventoryConfig(id);
-            });
-        }
 
-        function openEditInventoryItem(id) {
-            const config = state.inventoryConfig.find(c => c.id === id);
-            if (!config) return;
 
-            const entries = state.inventory.filter(i => i.configId === id);
-            const neuf = entries.find(e => e.condition === 'Neuf')?.quantity || 0;
-            const tb = entries.find(e => e.condition === 'TB état')?.quantity || 0;
-            const bon = entries.find(e => e.condition === 'Bon état')?.quantity || 0;
-            const abime = entries.find(e => e.condition === 'Abimé')?.quantity || 0;
 
-            document.getElementById('editInvId').value = id;
-            document.getElementById('editInvName').value = config.name;
-            document.getElementById('editInvTarget').value = config.target;
-
-            document.getElementById('editInvNeuf').value = neuf;
-            document.getElementById('editInvTB').value = tb;
-            document.getElementById('editInvBon').value = bon;
-            document.getElementById('editInvAbime').value = abime;
-
-            const modal = document.getElementById('editInventoryItemModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeEditInventoryItemModal() {
-            const modal = document.getElementById('editInventoryItemModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
-
-        function saveEditedInventoryItem() {
-            const id = parseInt(document.getElementById('editInvId').value);
-            const name = document.getElementById('editInvName').value.trim();
-            const target = parseInt(document.getElementById('editInvTarget').value) || 0;
-
-            const neuf = parseInt(document.getElementById('editInvNeuf').value) || 0;
-            const tb = parseInt(document.getElementById('editInvTB').value) || 0;
-            const bon = parseInt(document.getElementById('editInvBon').value) || 0;
-            const abime = parseInt(document.getElementById('editInvAbime').value) || 0;
-
-            if (name) {
-                // Mettre à jour la config
-                const config = state.inventoryConfig.find(c => c.id === id);
-                if (config) {
-                    config.name = name;
-                    config.target = target;
-                }
-
-                // Supprimer les anciennes entrées pour ce matériel
-                state.inventory = state.inventory.filter(i => i.configId !== id);
-
-                // Ajouter les nouvelles entrées si > 0
-                if (neuf > 0) state.inventory.push({ id: Date.now() + 1, configId: id, condition: 'Neuf', quantity: neuf });
-                if (tb > 0) state.inventory.push({ id: Date.now() + 2, configId: id, condition: 'TB état', quantity: tb });
-                if (bon > 0) state.inventory.push({ id: Date.now() + 3, configId: id, condition: 'Bon état', quantity: bon });
-                if (abime > 0) state.inventory.push({ id: Date.now() + 4, configId: id, condition: 'Abimé', quantity: abime });
-
-                saveAppState();
-                closeEditInventoryItemModal();
-                renderInventoryConfigList();
-                populateInventorySelects();
-                renderInventory();
-            }
-        }
 
         function resetInventoryItem(configId) {
             showCustomConfirm('Voulez-vous vraiment remettre à zéro le stock de ce matériel ?', "Remise à zéro", () => {
