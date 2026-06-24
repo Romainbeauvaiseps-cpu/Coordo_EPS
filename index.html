@@ -1050,6 +1050,10 @@
                     class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl hover:bg-[var(--secondary)] text-[color:var(--text-muted)] hover:text-[color:var(--text-main)] transition-all font-bold text-left">
                     <img src="logo_Navbar/reunion.png" alt="Réunion" class="w-6 h-6 object-contain"> Réunion
                 </button>
+                <button onclick="showPage('section-sportive'); if(window.innerWidth<1024) toggleSidebar()"
+                    class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl hover:bg-[var(--secondary)] text-[color:var(--text-muted)] hover:text-[color:var(--text-main)] transition-all font-bold text-left">
+                    <i data-lucide="medal" size="18"></i> Section Sportive
+                </button>
             </div>
 
             <div class="p-4 mt-auto mb-2 border-t border-[var(--border)] relative">
@@ -1176,6 +1180,16 @@
                                 </div>
                                 <h3 class="text-xl font-extrabold mb-2 text-[color:var(--text-main)]">Réunion</h3>
                                 <p class="text-sm text-[color:var(--text-muted)]">Comptes rendus et notes</p>
+                            </button>
+                            <button onclick="showPage('section-sportive')"
+                                class="glass-card p-8 group transition-all hover:-translate-y-2 flex flex-col items-center">
+                                <div
+                                    class="w-16 h-16 bg-purple-500/10 text-purple-500 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-purple-500/20 group-hover:scale-110 transition-all">
+                                    <i data-lucide="medal" size="32"></i>
+                                </div>
+                                <h3 class="text-xl font-extrabold mb-2 text-[color:var(--text-main)]">Section Sportive
+                                </h3>
+                                <p class="text-sm text-[color:var(--text-muted)]">Élèves et matériel</p>
                             </button>
                         </div>
                     </section>
@@ -1374,10 +1388,16 @@
                                     <p class="text-slate-400 text-sm">Gérez l'inventaire et l'état du matériel EPS</p>
                                 </div>
                             </div>
-                            <button onclick="openInventoryItemModal()"
-                                class="bg-[#F2784B] hover:bg-[#E06639] text-white px-6 py-2.5 rounded-lg font-bold flex items-center gap-2 shadow-md transition-all">
-                                <i data-lucide="plus" size="20"></i> Ajouter du matériel
-                            </button>
+                            <div class="flex items-center gap-2">
+                                <button onclick="openInventoryCategoriesModal()"
+                                    class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-lg font-bold flex items-center gap-2 transition-all shadow-sm">
+                                    <i data-lucide="settings" size="20"></i> Réglages
+                                </button>
+                                <button onclick="openInventoryItemModal()"
+                                    class="bg-[#F2784B] hover:bg-[#E06639] text-white px-6 py-2.5 rounded-lg font-bold flex items-center gap-2 shadow-md transition-all">
+                                    <i data-lucide="plus" size="20"></i> Ajouter du matériel
+                                </button>
+                            </div>>
                         </div>
 
                         <div class="flex items-center gap-2 mb-8">
@@ -1559,6 +1579,44 @@
 
                         </div>
 
+                        <!-- MODAL INVENTORY CATEGORIES -->
+                        <div id="inventoryCategoriesModal"
+                            class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden justify-center items-center z-[100] p-4">
+                            <div class="bg-white w-full max-w-md rounded-2xl shadow-xl flex flex-col max-h-[80vh]">
+                                <div
+                                    class="p-6 border-b border-slate-100 flex justify-between items-start bg-white sticky top-0 z-10">
+                                    <div>
+                                        <h2 class="text-xl font-bold text-slate-800">Catégories d'inventaire</h2>
+                                        <p class="text-sm text-slate-500">Gérez les catégories de matériel</p>
+                                    </div>
+                                    <button onclick="closeInventoryCategoriesModal()"
+                                        class="text-slate-400 hover:text-slate-600 transition-colors bg-slate-50 hover:bg-slate-100 p-2 rounded-full">
+                                        <i data-lucide="x" size="20"></i>
+                                    </button>
+                                </div>
+                                <div class="p-6 overflow-y-auto space-y-4">
+                                    <div class="flex gap-2">
+                                        <input type="text" id="newInvCategoryInput" placeholder="Nouvelle catégorie..."
+                                            class="flex-1 h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm transition-all">
+                                        <button onclick="addInventoryCategory()"
+                                            class="bg-blue-600 hover:bg-blue-500 text-white px-4 h-11 rounded-xl font-bold transition-all shadow-md">
+                                            <i data-lucide="plus" size="18"></i>
+                                        </button>
+                                    </div>
+                                    <div id="invCategoriesList" class="space-y-2 max-h-64 overflow-y-auto">
+                                        <!-- Categories here -->
+                                    </div>
+                                </div>
+                                <div
+                                    class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-3 rounded-b-2xl">
+                                    <button onclick="closeInventoryCategoriesModal()"
+                                        class="px-5 py-2.5 rounded-xl font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-colors">Annuler</button>
+                                    <button onclick="saveInventoryCategoriesModal()"
+                                        class="px-5 py-2.5 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-500 transition-colors shadow-md">Enregistrer</button>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- MODAL INVENTORY ITEM -->
                         <div id="inventoryItemModal"
                             class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden justify-center items-center z-[100] p-4">
@@ -1588,8 +1646,9 @@
 
                                     <div>
                                         <label class="text-sm font-bold text-slate-700 mb-1.5 block">Catégorie</label>
-                                        <input type="text" id="invModalCategory" placeholder="Ex : Ballons"
-                                            class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm transition-all">
+                                        <select id="invModalCategory"
+                                            class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm transition-all appearance-none cursor-pointer">
+                                        </select>
                                     </div>
 
                                     <div>
@@ -2621,6 +2680,602 @@
                         </div>
                     </div>
                 </div>
+
+                <section id="section-sportive" class="page space-y-6">
+                    <div class="flex justify-between items-start mb-6">
+                        <div class="flex gap-4">
+                            <div class="p-4 bg-purple-100 rounded-xl flex items-center justify-center">
+                                <i data-lucide="medal" class="text-purple-500" size="32"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-3xl font-extrabold text-[color:var(--text-main)] mb-1">Section Sportive
+                                </h2>
+                                <p class="text-slate-400 text-sm">Gérez les élèves et le matériel de la section sportive
+                                </p>
+                            </div>
+                        </div>
+                        <button onclick="openSectionStudentModal()"
+                            class="bg-purple-400 hover:bg-purple-500 text-white px-6 py-2.5 rounded-lg font-bold flex items-center gap-2 shadow-md transition-all">
+                            <i data-lucide="user-plus" size="20"></i> Ajouter un élève
+                        </button>
+                    </div>
+
+                    <!-- Effectif -->
+                    <div>
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="font-bold text-lg text-[color:var(--text-main)]">Effectif</h3>
+                            <div class="flex gap-2">
+                                <select id="sectionStudentTeamFilter" onchange="renderSectionStudents()"
+                                    class="bg-[var(--bg-input)] border border-[var(--border)] text-[color:var(--text-main)] text-sm rounded-lg focus:ring-purple-400 focus:border-purple-400 block p-2 outline-none">
+                                    <option value="Tous">Toutes Équipes</option>
+                                    <option value="1">Équipe 1</option>
+                                    <option value="2">Équipe 2</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="sectionStudentsGridContainer" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                            <!-- Rempli dynamiquement -->
+                        </div>
+                    </div>
+
+                    <!-- Matériel Section -->
+                    <div class="mt-12 mb-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-2xl font-bold text-[color:var(--text-main)] flex items-center gap-2"><i
+                                    data-lucide="package" size="24" class="text-purple-400"></i> Matériel Section
+                                Sportive</h3>
+                            <div class="flex items-center gap-2">
+                                <button onclick="openSectionInventoryCategoriesModal()"
+                                    class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2.5 rounded-lg font-bold flex items-center gap-2 transition-all shadow-sm">
+                                    <i data-lucide="settings" size="20"></i> Réglages
+                                </button>
+                                <button onclick="openSectionInventoryItemModal()"
+                                    class="bg-purple-400 hover:bg-purple-500 text-white px-6 py-2.5 rounded-lg font-bold flex items-center gap-2 shadow-md transition-all">
+                                    <i data-lucide="plus" size="20"></i> Ajouter du matériel
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Summary Cards -->
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                            <div
+                                class="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border)] flex justify-between items-start">
+                                <div>
+                                    <p
+                                        class="text-xs font-bold text-[color:var(--text-muted)] mb-2 uppercase tracking-wider">
+                                        Total Articles</p>
+                                    <p class="text-3xl font-bold text-blue-500" id="secInvSummaryTotal">0</p>
+                                </div>
+                                <div class="w-10 h-10 rounded-xl bg-blue-500 flex items-center justify-center">
+                                    <i data-lucide="box" class="text-white" size="20"></i>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border)] flex justify-between items-start">
+                                <div>
+                                    <p
+                                        class="text-xs font-bold text-[color:var(--text-muted)] mb-2 uppercase tracking-wider">
+                                        En bon état</p>
+                                    <p class="text-3xl font-bold text-[#20B27A]" id="secInvSummaryGood">0</p>
+                                </div>
+                                <div class="w-10 h-10 rounded-xl bg-[#20B27A] flex items-center justify-center">
+                                    <i data-lucide="check-circle" class="text-white" size="20"></i>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border)] flex justify-between items-start">
+                                <div>
+                                    <p
+                                        class="text-xs font-bold text-[color:var(--text-muted)] mb-2 uppercase tracking-wider">
+                                        Dégradé / HS</p>
+                                    <p class="text-3xl font-bold text-[#EF4444]" id="secInvSummaryBad">0</p>
+                                </div>
+                                <div class="w-10 h-10 rounded-xl bg-[#EF4444] flex items-center justify-center">
+                                    <i data-lucide="alert-triangle" class="text-white" size="20"></i>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-[var(--bg-card)] rounded-2xl p-6 shadow-sm border border-[var(--border)] flex justify-between items-start">
+                                <div>
+                                    <p
+                                        class="text-xs font-bold text-[color:var(--text-muted)] mb-2 uppercase tracking-wider">
+                                        À renouveler</p>
+                                    <p class="text-3xl font-bold text-[#F59E0B]" id="secInvSummaryRenew">0</p>
+                                </div>
+                                <div class="w-10 h-10 rounded-xl bg-[#F59E0B] flex items-center justify-center">
+                                    <i data-lucide="refresh-cw" class="text-white" size="20"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Inventory Table -->
+                        <div
+                            class="bg-[var(--bg-card)] rounded-2xl shadow-sm border border-[var(--border)] overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left text-[color:var(--text-main)]">
+                                    <thead
+                                        class="text-xs text-[color:var(--text-muted)] uppercase bg-[var(--bg-card)] border-b border-[var(--border)]">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-4">Article</th>
+                                            <th scope="col" class="px-6 py-4 text-center">Catégorie</th>
+                                            <th scope="col" class="px-6 py-4 text-center w-64">État du stock</th>
+                                            <th scope="col" class="px-6 py-4 text-center w-24">Total</th>
+                                            <th scope="col" class="px-6 py-4 text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sectionInventoryTableBody">
+                                        <tr>
+                                            <td colspan="5"
+                                                class="px-6 py-4 text-center text-[color:var(--text-muted)] italic">
+                                                Aucun matériel enregistré</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Commandes Vêtements -->
+                    <div class="mt-12 mb-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-2xl font-bold text-[color:var(--text-main)] flex items-center gap-2"><i
+                                    data-lucide="shopping-cart" size="24" class="text-purple-400"></i> Commandes
+                                Vêtements
+                            </h3>
+                            <div class="flex items-center gap-2">
+                                <button onclick="openSectionFinalOrderModal()"
+                                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2.5 rounded-lg font-bold flex items-center gap-2 transition-all shadow-sm">
+                                    <i data-lucide="check-square" size="20"></i> Passer la commande
+                                </button>
+                                <button onclick="openSectionOrderModal()"
+                                    class="bg-purple-400 hover:bg-purple-500 text-white px-6 py-2.5 rounded-lg font-bold flex items-center gap-2 shadow-md transition-all">
+                                    <i data-lucide="plus" size="20"></i> Pré-commande
+                                </button>
+                            </div>
+                        </div>
+
+                        <div
+                            class="bg-[var(--bg-card)] rounded-2xl shadow-sm border border-[var(--border)] overflow-hidden">
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-left text-[color:var(--text-main)]">
+                                    <thead
+                                        class="text-xs text-[color:var(--text-muted)] uppercase bg-[var(--bg-card)] border-b border-[var(--border)]">
+                                        <tr>
+                                            <th scope="col" class="px-6 py-4">Élève</th>
+                                            <th scope="col" class="px-6 py-4">Article</th>
+                                            <th scope="col" class="px-6 py-4 text-center">Taille</th>
+                                            <th scope="col" class="px-6 py-4 text-center">Paiement</th>
+                                            <th scope="col" class="px-6 py-4 text-center">Statut</th>
+                                            <th scope="col" class="px-6 py-4 text-right">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="sectionOrdersTableBody">
+                                        <!-- Rempli dynamiquement -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div id="sectionFinalOrdersContainer" class="mt-4 flex flex-col gap-2">
+                            <!-- Rempli dynamiquement -->
+                        </div>
+                    </div>
+
+                    <!-- MODALS SECTION SPORTIVE -->
+                    <!-- Modal Formulaire Élève -->
+                    <div id="sectionStudentFormModal"
+                        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden justify-center items-center z-[100] p-4">
+                        <div
+                            class="bg-white w-full max-w-lg rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+                            <div
+                                class="p-6 border-b border-slate-100 flex justify-between items-start bg-white sticky top-0 z-10">
+                                <div>
+                                    <h2 class="text-xl font-bold text-slate-800" id="secStudentModalTitle">Nouvel élève
+                                    </h2>
+                                    <p class="text-sm text-slate-500">Ajouter un élève à la section sportive</p>
+                                </div>
+                                <button onclick="closeSectionStudentModal()"
+                                    class="text-slate-400 hover:text-slate-600 transition-colors bg-slate-50 hover:bg-slate-100 p-2 rounded-full">
+                                    <i data-lucide="x" size="20"></i>
+                                </button>
+                            </div>
+                            <div class="p-6 overflow-y-auto space-y-5 bg-slate-50/50">
+                                <input type="hidden" id="secStudentModalId">
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="text-sm font-bold text-slate-700 mb-1.5 block">Nom *</label>
+                                        <input type="text" id="secStudentNom"
+                                            class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-bold text-slate-700 mb-1.5 block">Prénom *</label>
+                                        <input type="text" id="secStudentPrenom"
+                                            class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="text-sm font-bold text-slate-700 mb-1.5 block">Classe</label>
+                                        <input type="text" id="secStudentClasse" placeholder="Ex: 4ème A"
+                                            class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-bold text-slate-700 mb-1.5 block">Sexe</label>
+                                        <select id="secStudentSexe"
+                                            class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                                            <option value="">Sélectionner</option>
+                                            <option value="Garçon">Garçon</option>
+                                            <option value="Fille">Fille</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="text-sm font-bold text-slate-700 mb-1.5 block">Catégorie</label>
+                                        <select id="secStudentCategorie"
+                                            class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                                            <option value="">Sélectionner</option>
+                                            <option value="U13F">U13F</option>
+                                            <option value="U13G">U13G</option>
+                                            <option value="U15F">U15F</option>
+                                            <option value="U15G">U15G</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-bold text-slate-700 mb-1.5 block">Équipe</label>
+                                        <select id="secStudentEquipe"
+                                            class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                                            <option value="">Sélectionner</option>
+                                            <option value="1">Équipe 1</option>
+                                            <option value="2">Équipe 2</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="text-sm font-bold text-slate-700 mb-1.5 block">Club</label>
+                                        <select id="secStudentClub"
+                                            class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                                            <option value="">Sélectionner</option>
+                                            <option value="Oui">Oui</option>
+                                            <option value="Non">Non</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-bold text-slate-700 mb-1.5 block">Sport
+                                            pratiqué</label>
+                                        <input type="text" id="secStudentSport" placeholder="Ex: Basket"
+                                            class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="text-sm font-bold text-slate-700 mb-1.5 block">Taille Haut</label>
+                                        <select id="secStudentTailleHaut"
+                                            class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                                            <option value="">Sélectionner</option>
+                                            <option value="S">S</option>
+                                            <option value="M">M</option>
+                                            <option value="L">L</option>
+                                            <option value="XL">XL</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-bold text-slate-700 mb-1.5 block">Taille Bas</label>
+                                        <select id="secStudentTailleBas"
+                                            class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20">
+                                            <option value="">Sélectionner</option>
+                                            <option value="S">S</option>
+                                            <option value="M">M</option>
+                                            <option value="L">L</option>
+                                            <option value="XL">XL</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-4 border-t border-slate-100 bg-white flex justify-end gap-3 rounded-b-2xl">
+                                <button onclick="closeSectionStudentModal()"
+                                    class="px-5 py-2.5 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 transition-colors">Annuler</button>
+                                <button onclick="saveSectionStudent()"
+                                    class="px-5 py-2.5 rounded-xl font-bold text-white bg-purple-400 hover:bg-purple-500 transition-colors shadow-md flex items-center gap-2"
+                                    id="secStudentSaveBtn">
+                                    <i data-lucide="plus" size="18"></i> Ajouter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Profil Élève -->
+                    <div id="sectionStudentProfileModal"
+                        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden justify-center items-center z-[100] p-4">
+                        <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden flex flex-col">
+                            <div
+                                class="p-6 border-b border-slate-100 flex justify-between items-start bg-white sticky top-0 z-10">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-12 h-12 bg-purple-100 text-purple-500 rounded-full flex items-center justify-center font-black text-xl"
+                                        id="secProfileInitials">AB</div>
+                                    <div>
+                                        <h2 class="text-xl font-bold text-slate-800" id="secProfileName">Nom Prénom</h2>
+                                        <p class="text-sm text-slate-500 font-medium" id="secProfileClass">Classe /
+                                            Catégorie</p>
+                                    </div>
+                                </div>
+                                <button onclick="closeSectionStudentProfileModal()"
+                                    class="text-slate-400 hover:text-slate-600 transition-colors bg-slate-50 hover:bg-slate-100 p-2 rounded-full">
+                                    <i data-lucide="x" size="20"></i>
+                                </button>
+                            </div>
+                            <div class="p-6 space-y-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Sexe
+                                        </p>
+                                        <p class="text-sm font-bold text-slate-700" id="secProfileSexe">-</p>
+                                    </div>
+                                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Équipe
+                                        </p>
+                                        <p class="text-sm font-bold text-slate-700" id="secProfileEquipe">-</p>
+                                    </div>
+                                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Club
+                                        </p>
+                                        <p class="text-sm font-bold text-slate-700" id="secProfileClub">-</p>
+                                    </div>
+                                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Sport
+                                        </p>
+                                        <p class="text-sm font-bold text-slate-700" id="secProfileSport">-</p>
+                                    </div>
+                                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Taille
+                                            Haut</p>
+                                        <p class="text-sm font-bold text-slate-700" id="secProfileTailleHaut">-</p>
+                                    </div>
+                                    <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                        <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Taille
+                                            Bas</p>
+                                        <p class="text-sm font-bold text-slate-700" id="secProfileTailleBas">-</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-3 rounded-b-2xl">
+                                <button onclick="closeSectionStudentProfileModal()"
+                                    class="px-5 py-2.5 rounded-xl font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-colors">Fermer</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Inventaire Catégories Section -->
+                    <div id="sectionInventoryCategoriesModal"
+                        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden justify-center items-center z-[100] p-4">
+                        <div class="bg-white w-full max-w-md rounded-2xl shadow-xl flex flex-col max-h-[80vh]">
+                            <div
+                                class="p-6 border-b border-slate-100 flex justify-between items-start bg-white sticky top-0 z-10">
+                                <div>
+                                    <h2 class="text-xl font-bold text-slate-800">Catégories Matériel</h2>
+                                    <p class="text-sm text-slate-500">Gérez les catégories section sportive</p>
+                                </div>
+                                <button onclick="closeSectionInventoryCategoriesModal()"
+                                    class="text-slate-400 hover:text-slate-600 transition-colors bg-slate-50 hover:bg-slate-100 p-2 rounded-full">
+                                    <i data-lucide="x" size="20"></i>
+                                </button>
+                            </div>
+                            <div class="p-6 overflow-y-auto space-y-4">
+                                <div class="flex gap-2">
+                                    <input type="text" id="secNewInvCategoryInput" placeholder="Nouvelle catégorie..."
+                                        class="flex-1 h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 shadow-sm transition-all">
+                                    <button onclick="addSectionInventoryCategory()"
+                                        class="bg-purple-400 hover:bg-purple-500 text-white px-4 h-11 rounded-xl font-bold transition-all shadow-md">
+                                        <i data-lucide="plus" size="18"></i>
+                                    </button>
+                                </div>
+                                <div id="secInvCategoriesList" class="space-y-2 max-h-64 overflow-y-auto">
+                                    <!-- Categories here -->
+                                </div>
+                            </div>
+                            <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-3 rounded-b-2xl">
+                                <button onclick="closeSectionInventoryCategoriesModal()"
+                                    class="px-5 py-2.5 rounded-xl font-bold text-slate-600 bg-white border border-slate-200 hover:bg-slate-50 transition-colors">Annuler</button>
+                                <button onclick="saveSectionInventoryCategoriesModal()"
+                                    class="px-5 py-2.5 rounded-xl font-bold text-white bg-purple-400 hover:bg-purple-500 transition-colors shadow-md">Enregistrer</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Inventaire Item Section -->
+                    <div id="sectionInventoryItemModal"
+                        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden justify-center items-center z-[100] p-4">
+                        <div
+                            class="bg-white w-full max-w-lg rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+                            <div
+                                class="p-6 border-b border-slate-100 flex justify-between items-start bg-white sticky top-0 z-10">
+                                <div>
+                                    <h2 class="text-xl font-bold text-slate-800" id="secInvModalTitle">Nouveau matériel
+                                    </h2>
+                                    <p class="text-sm text-slate-500">Ajouter à la section sportive</p>
+                                </div>
+                                <button onclick="closeSectionInventoryItemModal()"
+                                    class="text-slate-400 hover:text-slate-600 transition-colors bg-slate-50 hover:bg-slate-100 p-2 rounded-full">
+                                    <i data-lucide="x" size="20"></i>
+                                </button>
+                            </div>
+
+                            <div class="p-6 overflow-y-auto space-y-5 bg-slate-50/50">
+                                <input type="hidden" id="secInvModalId">
+
+                                <div>
+                                    <label class="text-sm font-bold text-slate-700 mb-1.5 block">Nom *</label>
+                                    <input type="text" id="secInvModalName" placeholder="Ex : Chasubles"
+                                        class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 shadow-sm transition-all">
+                                </div>
+
+                                <div>
+                                    <label class="text-sm font-bold text-slate-700 mb-1.5 block">Catégorie</label>
+                                    <select id="secInvModalCategory"
+                                        class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 shadow-sm transition-all appearance-none cursor-pointer">
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="text-sm font-bold text-slate-700 mb-3 block">Quantité par état</label>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                                            <label class="text-xs font-bold text-[#20B27A] mb-2 block">Bon état</label>
+                                            <div class="relative">
+                                                <input type="number" id="secInvModalBon" min="0" value="0"
+                                                    oninput="updateSecInvModalTotal()"
+                                                    class="w-full h-10 bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3 outline-none focus:border-[#20B27A] text-left">
+                                            </div>
+                                        </div>
+                                        <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                                            <label class="text-xs font-bold text-blue-500 mb-2 block">Usé</label>
+                                            <div class="relative">
+                                                <input type="number" id="secInvModalUse" min="0" value="0"
+                                                    oninput="updateSecInvModalTotal()"
+                                                    class="w-full h-10 bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3 outline-none focus:border-blue-500 text-left">
+                                            </div>
+                                        </div>
+                                        <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                                            <label class="text-xs font-bold text-[#F59E0B] mb-2 block">Dégradé</label>
+                                            <div class="relative">
+                                                <input type="number" id="secInvModalDegrade" min="0" value="0"
+                                                    oninput="updateSecInvModalTotal()"
+                                                    class="w-full h-10 bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3 outline-none focus:border-[#F59E0B] text-left">
+                                            </div>
+                                        </div>
+                                        <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                                            <label class="text-xs font-bold text-[#EF4444] mb-2 block">Hors
+                                                service</label>
+                                            <div class="relative">
+                                                <input type="number" id="secInvModalHs" min="0" value="0"
+                                                    oninput="updateSecInvModalTotal()"
+                                                    class="w-full h-10 bg-slate-50 border border-slate-200 text-slate-800 rounded-lg px-3 outline-none focus:border-[#EF4444] text-left">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="text-sm text-slate-500 mt-2 font-medium" id="secInvModalTotalText">Total :
+                                        <span class="font-bold text-slate-800">0</span> unités
+                                    </p>
+                                </div>
+
+                                <div>
+                                    <label class="text-sm font-bold text-slate-700 mb-1.5 block">Objectif mini</label>
+                                    <select id="secInvModalTarget"
+                                        class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 shadow-sm transition-all"></select>
+                                </div>
+                            </div>
+                            <div class="p-4 border-t border-slate-100 bg-white flex justify-end gap-3 rounded-b-2xl">
+                                <button onclick="closeSectionInventoryItemModal()"
+                                    class="px-5 py-2.5 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 transition-colors">Annuler</button>
+                                <button onclick="saveSectionInventoryItem()" id="secInvModalSaveBtn"
+                                    class="px-5 py-2.5 rounded-xl font-bold text-white bg-purple-400 hover:bg-purple-500 transition-colors shadow-md flex items-center gap-2">
+                                    <i data-lucide="plus" size="18"></i> Ajouter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Commande Vêtement -->
+                    <div id="sectionOrderModal"
+                        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden justify-center items-center z-[100] p-4">
+                        <div class="bg-white w-full max-w-md rounded-2xl shadow-xl overflow-hidden flex flex-col">
+                            <div
+                                class="p-6 border-b border-slate-100 flex justify-between items-start bg-white sticky top-0 z-10">
+                                <div>
+                                    <h2 class="text-xl font-bold text-slate-800">Nouvelle Commande</h2>
+                                    <p class="text-sm text-slate-500">Ajouter un vêtement pour un élève</p>
+                                </div>
+                                <button onclick="closeSectionOrderModal()"
+                                    class="p-2 bg-slate-50 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors">
+                                    <i data-lucide="x" size="20"></i>
+                                </button>
+                            </div>
+                            <div class="p-6 overflow-y-auto space-y-5">
+                                <div>
+                                    <label class="text-sm font-bold text-slate-700 mb-1.5 block">Élève *</label>
+                                    <select id="secOrderStudent"
+                                        class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 shadow-sm transition-all appearance-none cursor-pointer">
+                                        <!-- Rempli dynamiquement -->
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-sm font-bold text-slate-700 mb-1.5 block">Vêtement *</label>
+                                    <select id="secOrderType"
+                                        class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 shadow-sm transition-all appearance-none cursor-pointer">
+                                        <option value="">Sélectionner</option>
+                                        <option value="T-shirt">T-shirt</option>
+                                        <option value="Sweat">Sweat</option>
+                                        <option value="Short">Short</option>
+                                        <option value="Jogging">Jogging</option>
+                                        <option value="Gourde">Gourde</option>
+                                    </select>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="text-sm font-bold text-slate-700 mb-1.5 block">A payé ?</label>
+                                        <select id="secOrderPaid"
+                                            class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 shadow-sm transition-all">
+                                            <option value="Non">Non</option>
+                                            <option value="Oui">Oui</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-bold text-slate-700 mb-1.5 block">Montant (€)</label>
+                                        <input type="number" id="secOrderPrice" min="0" step="0.5" placeholder="Ex: 15"
+                                            class="w-full h-11 bg-white border border-slate-200 text-slate-800 rounded-xl px-4 outline-none focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 shadow-sm transition-all">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-4 border-t border-slate-100 bg-white flex justify-end gap-3 rounded-b-2xl">
+                                <button onclick="closeSectionOrderModal()"
+                                    class="px-5 py-2.5 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 transition-colors">Annuler</button>
+                                <button onclick="saveSectionOrder()"
+                                    class="px-5 py-2.5 rounded-xl font-bold text-white bg-purple-400 hover:bg-purple-500 transition-colors shadow-md flex items-center gap-2">
+                                    <i data-lucide="plus" size="18"></i> Ajouter
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal Commande Finale -->
+                    <div id="sectionFinalOrderModal"
+                        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden justify-center items-center z-[100] p-4">
+                        <div
+                            class="bg-white w-full max-w-2xl rounded-2xl shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+                            <div
+                                class="p-6 border-b border-slate-100 flex justify-between items-start bg-white sticky top-0 z-10">
+                                <div>
+                                    <h2 class="text-xl font-bold text-slate-800">Passer la commande</h2>
+                                    <p class="text-sm text-slate-500">Ajustez les quantités avant validation</p>
+                                </div>
+                                <div class="flex gap-2 items-center">
+                                    <button onclick="exportSectionFinalOrderToExcel()"
+                                        class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg font-bold flex items-center gap-2 transition-all shadow-sm text-sm">
+                                        <i data-lucide="download" size="16"></i> Exporter
+                                    </button>
+                                    <button onclick="closeSectionFinalOrderModal()"
+                                        class="p-2 bg-slate-50 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full transition-colors ml-2">
+                                        <i data-lucide="x" size="20"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="p-6 overflow-y-auto" id="secFinalOrderItems">
+                                <!-- Grille générée dynamiquement -->
+                            </div>
+                            <div class="p-4 border-t border-slate-100 bg-white flex justify-end gap-3 rounded-b-2xl"
+                                id="secFinalOrderFooter">
+                                <!-- Boutons dynamiques -->
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
             </main>
         </div>
     </div>
@@ -2644,8 +3299,15 @@
             assignments: {}, // Format: { cellId: [ { profId, text, color, type, recurrence: 'weekly'|'A'|'B' } ] }
             distribution: [], // Format: { profId, n6: 0, n5: 0, n4: 0, n3: 0, selectedOptions: {} }
             sharedClasses: [], // Format: { id, levelKey, className, assignments: [{ profId, hours }] }
+            inventoryCategories: [], // Predefined categories
             inventoryConfig: [], // Format: { id, category, name, target }
             inventory: [], // Format: { id, configId, condition, quantity }
+            sectionStudents: [], // Format: { id, nom, prenom, classe, sexe, categorie, equipe, club, sport, tailleHaut, tailleBas }
+            sectionInventoryCategories: [], // Predefined categories for section
+            sectionInventoryConfig: [], // Format: { id, category, name, target }
+            sectionInventory: [], // Format: { id, configId, condition, quantity }
+            sectionOrders: [], // Format: { id, studentId, studentName, type, taille, paid, price, received, date }
+            sectionFinalOrders: [], // Format: { id, date, items: [{type, taille, qty}] }
             dismissedOrders: [], // Format: [ configId ]
             manualOrders: [], // Format: [ { id, text } ]
             currentOrder: [], // Format: [ { supplier, name, ref, price, qty, total } ]
@@ -2696,7 +3358,14 @@
                     // Fusionner avec l'état par défaut pour éviter les bugs si la structure change
                     state = { ...state, ...loadedState };
                     if (!state.sharedClasses) state.sharedClasses = [];
+                    if (!state.inventoryCategories) state.inventoryCategories = [];
                     if (!state.inventoryConfig) state.inventoryConfig = [];
+                    if (!state.sectionStudents) state.sectionStudents = [];
+                    if (!state.sectionInventoryCategories) state.sectionInventoryCategories = [];
+                    if (!state.sectionInventoryConfig) state.sectionInventoryConfig = [];
+                    if (!state.sectionInventory) state.sectionInventory = [];
+                    if (!state.sectionOrders) state.sectionOrders = [];
+                    if (!state.sectionFinalOrders) state.sectionFinalOrders = [];
                     if (!state.settings) state.settings = {};
                     if (!state.settings.classColors) state.settings.classColors = {};
                     if (!state.inventory) state.inventory = [];
@@ -2877,6 +3546,12 @@
                 renderInventory();
                 renderCurrentOrder();
                 renderSavedOrders();
+            }
+            if (pageId === 'section-sportive') {
+                renderSectionStudents();
+                renderSectionInventory();
+                renderSectionOrders();
+                renderSectionFinalOrders();
             }
         }
 
@@ -4766,6 +5441,19 @@
                 }
             }
 
+            const catSelect = document.getElementById('invModalCategory');
+            catSelect.innerHTML = '<option value="">Sans catégorie</option>';
+            const uniqueCats = new Set(state.inventoryCategories || []);
+            if (id) {
+                const config = state.inventoryConfig.find(c => c.id === id);
+                if (config && config.category && !uniqueCats.has(config.category)) {
+                    uniqueCats.add(config.category);
+                }
+            }
+            Array.from(uniqueCats).forEach(cat => {
+                catSelect.innerHTML += `<option value="${cat}">${cat}</option>`;
+            });
+
             if (id) {
                 const config = state.inventoryConfig.find(c => c.id === id);
                 document.getElementById('invModalTitle').innerText = 'Modifier le matériel';
@@ -5855,10 +6543,535 @@
             }
         }
 
+        let tempInventoryCategories = [];
+
+        function openInventoryCategoriesModal() {
+            tempInventoryCategories = [...(state.inventoryCategories || [])];
+            renderInventoryCategoriesList();
+            const modal = document.getElementById('inventoryCategoriesModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeInventoryCategoriesModal() {
+            const modal = document.getElementById('inventoryCategoriesModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function renderInventoryCategoriesList() {
+            const list = document.getElementById('invCategoriesList');
+            if (tempInventoryCategories.length === 0) {
+                list.innerHTML = '<p class="text-sm text-slate-500 italic text-center py-4">Aucune catégorie configurée.</p>';
+                return;
+            }
+            list.innerHTML = tempInventoryCategories.map((cat, index) => `
+                <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-sm font-bold text-slate-700">${cat}</span>
+                    <button onclick="removeInventoryCategory(${index})" class="text-red-400 hover:text-red-500 transition-colors p-1 bg-red-50 hover:bg-red-100 rounded-lg">
+                        <i data-lucide="trash-2" size="16"></i>
+                    </button>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function addInventoryCategory() {
+            const input = document.getElementById('newInvCategoryInput');
+            const val = input.value.trim();
+            if (val && !tempInventoryCategories.includes(val)) {
+                tempInventoryCategories.push(val);
+                input.value = '';
+                renderInventoryCategoriesList();
+            }
+        }
+
+        function removeInventoryCategory(index) {
+            tempInventoryCategories.splice(index, 1);
+            renderInventoryCategoriesList();
+        }
+
+        function saveInventoryCategoriesModal() {
+            state.inventoryCategories = [...tempInventoryCategories];
+            saveAppState();
+            closeInventoryCategoriesModal();
+        }
+
+        // ==========================================
+        // SECTION SPORTIVE - GESTION DES ELEVES
+        // ==========================================
+        function openSectionStudentModal(id = null) {
+            document.getElementById('secStudentModalId').value = id || '';
+            if (id) {
+                const student = state.sectionStudents.find(s => s.id === id);
+                document.getElementById('secStudentModalTitle').innerText = 'Modifier l\'élève';
+                document.getElementById('secStudentNom').value = student.nom || '';
+                document.getElementById('secStudentPrenom').value = student.prenom || '';
+                document.getElementById('secStudentClasse').value = student.classe || '';
+                document.getElementById('secStudentSexe').value = student.sexe || '';
+                document.getElementById('secStudentCategorie').value = student.categorie || '';
+                document.getElementById('secStudentEquipe').value = student.equipe || '';
+                document.getElementById('secStudentClub').value = student.club || '';
+                document.getElementById('secStudentSport').value = student.sport || '';
+                document.getElementById('secStudentTailleHaut').value = student.tailleHaut || '';
+                document.getElementById('secStudentTailleBas').value = student.tailleBas || '';
+                document.getElementById('secStudentSaveBtn').innerHTML = '<i data-lucide="save" size="18"></i> Enregistrer';
+            } else {
+                document.getElementById('secStudentModalTitle').innerText = 'Nouvel élève';
+                document.getElementById('secStudentNom').value = '';
+                document.getElementById('secStudentPrenom').value = '';
+                document.getElementById('secStudentClasse').value = '';
+                document.getElementById('secStudentSexe').value = '';
+                document.getElementById('secStudentCategorie').value = '';
+                document.getElementById('secStudentEquipe').value = '';
+                document.getElementById('secStudentClub').value = '';
+                document.getElementById('secStudentSport').value = '';
+                document.getElementById('secStudentTailleHaut').value = '';
+                document.getElementById('secStudentTailleBas').value = '';
+                document.getElementById('secStudentSaveBtn').innerHTML = '<i data-lucide="plus" size="18"></i> Ajouter';
+            }
+            const modal = document.getElementById('sectionStudentFormModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeSectionStudentModal() {
+            const modal = document.getElementById('sectionStudentFormModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function saveSectionStudent() {
+            const id = document.getElementById('secStudentModalId').value;
+            const nom = document.getElementById('secStudentNom').value.trim();
+            const prenom = document.getElementById('secStudentPrenom').value.trim();
+
+            if (!nom || !prenom) {
+                alert("Le nom et le prénom sont obligatoires.");
+                return;
+            }
+
+            const studentData = {
+                nom, prenom,
+                classe: document.getElementById('secStudentClasse').value.trim(),
+                sexe: document.getElementById('secStudentSexe').value,
+                categorie: document.getElementById('secStudentCategorie').value,
+                equipe: document.getElementById('secStudentEquipe').value,
+                club: document.getElementById('secStudentClub').value,
+                sport: document.getElementById('secStudentSport').value.trim(),
+                tailleHaut: document.getElementById('secStudentTailleHaut').value,
+                tailleBas: document.getElementById('secStudentTailleBas').value
+            };
+
+            if (id) {
+                const idx = state.sectionStudents.findIndex(s => s.id === parseInt(id));
+                if (idx !== -1) {
+                    state.sectionStudents[idx] = { ...state.sectionStudents[idx], ...studentData };
+                }
+            } else {
+                studentData.id = Date.now();
+                state.sectionStudents.push(studentData);
+            }
+
+            saveAppState();
+            closeSectionStudentModal();
+            renderSectionStudents();
+        }
+
+        function deleteSectionStudent(id) {
+            if (confirm("Êtes-vous sûr de vouloir supprimer cet élève ?")) {
+                state.sectionStudents = state.sectionStudents.filter(s => s.id !== id);
+                saveAppState();
+                renderSectionStudents();
+            }
+        }
+
+        function renderSectionStudents() {
+            const container = document.getElementById('sectionStudentsGridContainer');
+            const teamFilter = document.getElementById('sectionStudentTeamFilter').value;
+
+            let filtered = state.sectionStudents || [];
+
+            if (teamFilter !== 'Tous') {
+                filtered = filtered.filter(s => s.equipe === teamFilter);
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML = '<div class="col-span-full text-center py-8"><p class="text-black italic font-bold">pas d\'élève inscrit</p></div>';
+                return;
+            }
+
+            const categories = [
+                { id: 'U13F', bg: 'bg-yellow-50', border: 'border-yellow-200', headerBg: 'bg-yellow-100/50', text: 'text-yellow-800', countBg: 'bg-yellow-100' },
+                { id: 'U13G', bg: 'bg-orange-50', border: 'border-orange-200', headerBg: 'bg-orange-100/50', text: 'text-orange-800', countBg: 'bg-orange-100' },
+                { id: 'U15F', bg: 'bg-purple-50', border: 'border-purple-200', headerBg: 'bg-purple-100/50', text: 'text-purple-800', countBg: 'bg-purple-100' },
+                { id: 'U15G', bg: 'bg-blue-50', border: 'border-blue-200', headerBg: 'bg-blue-100/50', text: 'text-blue-800', countBg: 'bg-blue-100' }
+            ];
+
+            container.innerHTML = categories.map(cat => {
+                const studentsInCat = filtered.filter(s => s.categorie === cat.id);
+                if (studentsInCat.length === 0) return '';
+
+                return `
+                <div class="${cat.bg} rounded-2xl shadow-sm border ${cat.border} overflow-hidden">
+                    <div class="p-3 border-b ${cat.border} ${cat.headerBg} flex justify-between items-center">
+                        <h4 class="font-bold ${cat.text}">${cat.id}</h4>
+                        <span class="text-xs font-bold ${cat.text} ${cat.countBg} px-2 py-1 rounded-lg">${studentsInCat.length}</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-[color:var(--text-main)]">
+                            <thead class="text-[10px] text-[color:var(--text-muted)] uppercase border-b ${cat.border}">
+                                <tr>
+                                    <th scope="col" class="px-4 py-2">Élève</th>
+                                    <th scope="col" class="px-4 py-2 text-center">Éq</th>
+                                    <th scope="col" class="px-4 py-2 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${studentsInCat.map(student => `
+                                <tr class="hover:bg-white/50 transition-colors border-b ${cat.border} last:border-0 cursor-pointer" onclick="openSectionStudentProfileModal(${student.id})">
+                                    <td class="px-4 py-2 font-bold text-slate-800">${student.nom.toUpperCase()} ${student.prenom}</td>
+                                    <td class="px-4 py-2 text-center font-bold text-slate-500">${student.equipe || '-'}</td>
+                                    <td class="px-4 py-2 text-right">
+                                        <div class="flex justify-end gap-1" onclick="event.stopPropagation()">
+                                            <button onclick="openSectionStudentModal(${student.id})" class="p-1 text-slate-400 hover:text-blue-500 transition-colors rounded-lg">
+                                                <i data-lucide="edit-2" size="14"></i>
+                                            </button>
+                                            <button onclick="deleteSectionStudent(${student.id})" class="p-1 text-slate-400 hover:text-red-500 transition-colors rounded-lg">
+                                                <i data-lucide="trash-2" size="14"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            lucide.createIcons();
+        }
+
+        function openSectionStudentProfileModal(id) {
+            const student = state.sectionStudents.find(s => s.id === id);
+            if (!student) return;
+
+            document.getElementById('secProfileInitials').innerText = `${student.prenom.charAt(0)}${student.nom.charAt(0)}`.toUpperCase();
+            document.getElementById('secProfileName').innerText = `${student.prenom} ${student.nom.toUpperCase()}`;
+            document.getElementById('secProfileClass').innerText = `${student.classe || '-'} / ${student.categorie || '-'}`;
+
+            document.getElementById('secProfileSexe').innerText = student.sexe || '-';
+            document.getElementById('secProfileEquipe').innerText = student.equipe ? `Équipe ${student.equipe}` : '-';
+            document.getElementById('secProfileClub').innerText = student.club || '-';
+            document.getElementById('secProfileSport').innerText = student.sport || '-';
+            document.getElementById('secProfileTailleHaut').innerText = student.tailleHaut || '-';
+            document.getElementById('secProfileTailleBas').innerText = student.tailleBas || '-';
+
+            const modal = document.getElementById('sectionStudentProfileModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeSectionStudentProfileModal() {
+            const modal = document.getElementById('sectionStudentProfileModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        // ==========================================
+        // SECTION SPORTIVE - GESTION DU MATERIEL
+        // ==========================================
+        let tempSecInventoryCategories = [];
+
+        function openSectionInventoryCategoriesModal() {
+            tempSecInventoryCategories = [...(state.sectionInventoryCategories || [])];
+            renderSectionInventoryCategoriesList();
+            const modal = document.getElementById('sectionInventoryCategoriesModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeSectionInventoryCategoriesModal() {
+            const modal = document.getElementById('sectionInventoryCategoriesModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function renderSectionInventoryCategoriesList() {
+            const list = document.getElementById('secInvCategoriesList');
+            if (tempSecInventoryCategories.length === 0) {
+                list.innerHTML = '<p class="text-sm text-slate-500 italic text-center py-4">Aucune catégorie configurée.</p>';
+                return;
+            }
+            list.innerHTML = tempSecInventoryCategories.map((cat, index) => `
+                <div class="flex justify-between items-center bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                    <span class="text-sm font-bold text-slate-700">${cat}</span>
+                    <button onclick="removeSectionInventoryCategory(${index})" class="text-red-400 hover:text-red-500 transition-colors p-1 bg-red-50 hover:bg-red-100 rounded-lg">
+                        <i data-lucide="trash-2" size="16"></i>
+                    </button>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function addSectionInventoryCategory() {
+            const input = document.getElementById('secNewInvCategoryInput');
+            const val = input.value.trim();
+            if (val && !tempSecInventoryCategories.includes(val)) {
+                tempSecInventoryCategories.push(val);
+                input.value = '';
+                renderSectionInventoryCategoriesList();
+            }
+        }
+
+        function removeSectionInventoryCategory(index) {
+            tempSecInventoryCategories.splice(index, 1);
+            renderSectionInventoryCategoriesList();
+        }
+
+        function saveSectionInventoryCategoriesModal() {
+            state.sectionInventoryCategories = [...tempSecInventoryCategories];
+            saveAppState();
+            closeSectionInventoryCategoriesModal();
+        }
+
+        function openSectionInventoryItemModal(id = null) {
+            document.getElementById('secInvModalId').value = id || '';
+            const targetSelect = document.getElementById('secInvModalTarget');
+            if (targetSelect && targetSelect.options.length === 0) {
+                for (let i = 0; i <= 100; i++) {
+                    targetSelect.add(new Option(i, i));
+                }
+            }
+
+            const catSelect = document.getElementById('secInvModalCategory');
+            catSelect.innerHTML = '<option value="">Sans catégorie</option>';
+            const uniqueCats = new Set(state.sectionInventoryCategories || []);
+            if (id) {
+                const config = state.sectionInventoryConfig.find(c => c.id === id);
+                if (config && config.category && !uniqueCats.has(config.category)) {
+                    uniqueCats.add(config.category);
+                }
+            }
+            Array.from(uniqueCats).forEach(cat => {
+                catSelect.innerHTML += `<option value="${cat}">${cat}</option>`;
+            });
+
+            if (id) {
+                const config = state.sectionInventoryConfig.find(c => c.id === id);
+                document.getElementById('secInvModalTitle').innerText = 'Modifier le matériel';
+                document.getElementById('secInvModalTarget').value = config.target || 0;
+                document.getElementById('secInvModalName').value = config.name || '';
+                document.getElementById('secInvModalCategory').value = config.category || '';
+
+                const entries = state.sectionInventory.filter(i => i.configId === id);
+                document.getElementById('secInvModalBon').value = entries.find(e => e.condition === 'Bon état')?.quantity || 0;
+                document.getElementById('secInvModalUse').value = entries.find(e => e.condition === 'Usé')?.quantity || 0;
+                document.getElementById('secInvModalDegrade').value = entries.find(e => e.condition === 'Dégradé')?.quantity || 0;
+                document.getElementById('secInvModalHs').value = entries.find(e => e.condition === 'Hors service')?.quantity || 0;
+                document.getElementById('secInvModalSaveBtn').innerHTML = '<i data-lucide="save" size="18"></i> Enregistrer';
+            } else {
+                document.getElementById('secInvModalTitle').innerText = 'Nouveau matériel';
+                document.getElementById('secInvModalTarget').value = 0;
+                document.getElementById('secInvModalName').value = '';
+                document.getElementById('secInvModalCategory').value = '';
+                document.getElementById('secInvModalBon').value = 0;
+                document.getElementById('secInvModalUse').value = 0;
+                document.getElementById('secInvModalDegrade').value = 0;
+                document.getElementById('secInvModalHs').value = 0;
+                document.getElementById('secInvModalSaveBtn').innerHTML = '<i data-lucide="plus" size="18"></i> Ajouter';
+            }
+
+            updateSecInvModalTotal();
+            const modal = document.getElementById('sectionInventoryItemModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function closeSectionInventoryItemModal() {
+            const modal = document.getElementById('sectionInventoryItemModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function updateSecInvModalTotal() {
+            const bon = parseInt(document.getElementById('secInvModalBon').value) || 0;
+            const use = parseInt(document.getElementById('secInvModalUse').value) || 0;
+            const degrade = parseInt(document.getElementById('secInvModalDegrade').value) || 0;
+            const hs = parseInt(document.getElementById('secInvModalHs').value) || 0;
+            document.getElementById('secInvModalTotalText').innerHTML = `Total : <span class="font-bold text-slate-800">${bon + use + degrade + hs}</span> unités`;
+        }
+
+        function saveSectionInventoryItem() {
+            const id = document.getElementById('secInvModalId').value;
+            const name = document.getElementById('secInvModalName').value.trim();
+            const category = document.getElementById('secInvModalCategory').value.trim();
+            const target = parseInt(document.getElementById('secInvModalTarget').value) || 0;
+
+            if (!name) {
+                alert("Le nom est obligatoire.");
+                return;
+            }
+
+            const bonQty = parseInt(document.getElementById('secInvModalBon').value) || 0;
+            const useQty = parseInt(document.getElementById('secInvModalUse').value) || 0;
+            const degradeQty = parseInt(document.getElementById('secInvModalDegrade').value) || 0;
+            const hsQty = parseInt(document.getElementById('secInvModalHs').value) || 0;
+
+            let configId = parseInt(id);
+            if (!id) {
+                configId = Date.now();
+                state.sectionInventoryConfig.push({ id: configId, name, category, target });
+            } else {
+                const config = state.sectionInventoryConfig.find(c => c.id === configId);
+                if (config) {
+                    config.name = name;
+                    config.category = category;
+                    config.target = target;
+                }
+            }
+
+            // Remove old entries
+            state.sectionInventory = state.sectionInventory.filter(i => i.configId !== configId);
+
+            // Add new entries
+            if (bonQty > 0) state.sectionInventory.push({ id: Date.now() + 1, configId, condition: 'Bon état', quantity: bonQty });
+            if (useQty > 0) state.sectionInventory.push({ id: Date.now() + 2, configId, condition: 'Usé', quantity: useQty });
+            if (degradeQty > 0) state.sectionInventory.push({ id: Date.now() + 3, configId, condition: 'Dégradé', quantity: degradeQty });
+            if (hsQty > 0) state.sectionInventory.push({ id: Date.now() + 4, configId, condition: 'Hors service', quantity: hsQty });
+
+            saveAppState();
+            closeSectionInventoryItemModal();
+            renderSectionInventory();
+        }
+
+        function deleteSectionInventoryConfig(id) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer cet article et tout son historique ?')) {
+                state.sectionInventoryConfig = state.sectionInventoryConfig.filter(c => c.id !== id);
+                state.sectionInventory = state.sectionInventory.filter(i => i.configId !== id);
+                saveAppState();
+                renderSectionInventory();
+            }
+        }
+
+        function renderSectionInventory() {
+            const tbody = document.getElementById('sectionInventoryTableBody');
+
+            if (!state.sectionInventoryConfig || state.sectionInventoryConfig.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-[color:var(--text-muted)] italic">Aucun matériel enregistré</td></tr>';
+                document.getElementById('secInvSummaryTotal').innerText = '0';
+                document.getElementById('secInvSummaryGood').innerText = '0';
+                document.getElementById('secInvSummaryBad').innerText = '0';
+                document.getElementById('secInvSummaryRenew').innerText = '0';
+                return;
+            }
+
+            let grandTotal = 0;
+            let goodTotal = 0;
+            let badTotal = 0;
+            let renewCount = 0;
+
+            const categories = [...new Set(state.sectionInventoryConfig.map(c => c.category || 'Sans catégorie'))].sort();
+
+            let html = '';
+
+            categories.forEach(cat => {
+                let itemsInCategory = state.sectionInventoryConfig.filter(c => (c.category || 'Sans catégorie') === cat);
+                let catHtml = '';
+
+                itemsInCategory.forEach(config => {
+                    const entries = state.sectionInventory.filter(i => i.configId === config.id);
+
+                    const bon = entries.find(e => e.condition === 'Bon état')?.quantity || 0;
+                    const use = entries.find(e => e.condition === 'Usé')?.quantity || 0;
+                    const degrade = entries.find(e => e.condition === 'Dégradé')?.quantity || 0;
+                    const hs = entries.find(e => e.condition === 'Hors service')?.quantity || 0;
+
+                    const total = bon + use + degrade + hs;
+                    grandTotal += total;
+                    goodTotal += (bon + use);
+                    badTotal += (degrade + hs);
+
+                    let statusBadge = '';
+                    if (total === 0) {
+                        statusBadge = '<span class="bg-red-100 text-red-600 px-2 py-1 rounded-full text-xs font-bold">Rupture</span>';
+                    } else if (config.target > 0 && total < config.target) {
+                        statusBadge = '<span class="bg-orange-100 text-orange-600 px-2 py-1 rounded-full text-xs font-bold">À commander</span>';
+                        renewCount++;
+                    }
+
+                    catHtml += `
+                    <tr class="hover:bg-[var(--secondary)] transition-colors border-b border-[var(--border)] last:border-0 group">
+                        <td class="px-6 py-4 pl-10 border-l-[3px] border-transparent hover:border-purple-400 transition-colors">
+                            <div class="font-bold text-[color:var(--text-main)] mb-1">${config.name}</div>
+                            ${statusBadge}
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-600">${config.category || 'Sans catégorie'}</span>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <div class="flex items-center justify-center gap-1.5 flex-wrap">
+                                ${bon > 0 ? '<div class="px-2 py-1 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-lg text-xs font-bold flex items-center gap-1"><div class="w-1.5 h-1.5 rounded-full bg-emerald-500"></div> ' + bon + ' Bon</div>' : ''}
+                                ${use > 0 ? '<div class="px-2 py-1 bg-blue-50 border border-blue-200 text-blue-700 rounded-lg text-xs font-bold flex items-center gap-1"><div class="w-1.5 h-1.5 rounded-full bg-blue-500"></div> ' + use + ' Usé</div>' : ''}
+                                ${degrade > 0 ? '<div class="px-2 py-1 bg-amber-50 border border-amber-200 text-amber-700 rounded-lg text-xs font-bold flex items-center gap-1"><div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div> ' + degrade + ' Dég.</div>' : ''}
+                                ${hs > 0 ? '<div class="px-2 py-1 bg-red-50 border border-red-200 text-red-700 rounded-lg text-xs font-bold flex items-center gap-1"><div class="w-1.5 h-1.5 rounded-full bg-red-500"></div> ' + hs + ' HS</div>' : ''}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-center font-black text-[color:var(--text-main)] text-lg">${total}</td>
+                        <td class="px-6 py-4 text-right">
+                            <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <button onclick="openSectionInventoryItemModal(${config.id})" class="p-1.5 text-slate-400 hover:text-blue-500 transition-colors bg-slate-50 hover:bg-blue-50 rounded-lg">
+                                    <i data-lucide="edit-2" size="16"></i>
+                                </button>
+                                <button onclick="deleteSectionInventoryConfig(${config.id})" class="p-1.5 text-slate-400 hover:text-red-500 transition-colors bg-slate-50 hover:bg-red-50 rounded-lg">
+                                    <i data-lucide="trash-2" size="16"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    `;
+                });
+
+                if (itemsInCategory.length > 0) {
+                    html += `
+                    <tr class="bg-slate-100/80 border-b border-[var(--border)]">
+                        <td colspan="5" class="px-6 py-2">
+                            <span class="text-xs font-black text-slate-500 uppercase tracking-widest">${cat}</span>
+                        </td>
+                    </tr>
+                    `;
+                    html += catHtml;
+                }
+            });
+
+            tbody.innerHTML = html;
+
+            document.getElementById('secInvSummaryTotal').innerText = grandTotal;
+            document.getElementById('secInvSummaryGood').innerText = goodTotal;
+            document.getElementById('secInvSummaryBad').innerText = badTotal;
+            document.getElementById('secInvSummaryRenew').innerText = renewCount;
+            lucide.createIcons();
+        }
+
         function exportAllData() {
-            const dataStr = JSON.stringify(state, null, 2);
+            const dataToExport = {
+                version: "1.1",
+                exportDate: new Date().toISOString(),
+                theme: localStorage.getItem('eps_coordo_theme') || 'dark',
+                state: state
+            };
+            const dataStr = JSON.stringify(dataToExport, null, 2);
             const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
-            const exportFileDefaultName = 'coordo_eps_sauvegarde.json';
+
+            // Format de la date pour le nom de fichier : YYYY-MM-DD
+            const dateStr = new Date().toISOString().split('T')[0];
+            const exportFileDefaultName = `coordo_eps_sauvegarde_${dateStr}.json`;
 
             const linkElement = document.createElement('a');
             linkElement.setAttribute('href', dataUri);
@@ -5879,11 +7092,31 @@
             const reader = new FileReader();
             reader.onload = function (e) {
                 try {
-                    const importedState = JSON.parse(e.target.result);
-                    if (importedState) {
+                    const importedData = JSON.parse(e.target.result);
+                    if (importedData) {
+                        let importedState = importedData;
+
+                        // Support du nouveau format avec métadonnées et thème, ainsi que les anciennes sauvegardes
+                        if (importedData.state) {
+                            importedState = importedData.state;
+
+                            // Restauration du thème si présent
+                            if (importedData.theme) {
+                                localStorage.setItem('eps_coordo_theme', importedData.theme);
+                                const icon = document.getElementById('theme-icon');
+                                if (importedData.theme === 'light') {
+                                    document.body.classList.add('light');
+                                    if (icon) icon.setAttribute('data-lucide', 'moon');
+                                } else {
+                                    document.body.classList.remove('light');
+                                    if (icon) icon.setAttribute('data-lucide', 'sun');
+                                }
+                            }
+                        }
+
                         state = { ...state, ...importedState };
                         saveAppState();
-                        alert('Données importées avec succès ! La page va se recharger.');
+                        alert('Données importées avec succès ! Toutes les modifications, y compris l\'inventaire, ont été restaurées. La page va se recharger.');
                         window.location.reload();
                     }
                 } catch (error) {
@@ -5892,6 +7125,417 @@
             };
             reader.readAsText(file);
             event.target.value = ''; // Reset input
+        }
+
+        // --- SECTION SPORTIVE : GESTION DES COMMANDES VÊTEMENTS ---
+
+        function openSectionOrderModal() {
+            const select = document.getElementById('secOrderStudent');
+            select.innerHTML = '<option value="">Sélectionner un élève</option>' +
+                state.sectionStudents.map(s => `<option value="${s.id}">${s.nom.toUpperCase()} ${s.prenom}</option>`).join('');
+
+            document.getElementById('secOrderType').value = '';
+            document.getElementById('secOrderPaid').value = 'Non';
+            document.getElementById('secOrderPrice').value = '';
+
+            document.getElementById('sectionOrderModal').classList.remove('hidden');
+            document.getElementById('sectionOrderModal').classList.add('flex');
+        }
+
+        function closeSectionOrderModal() {
+            document.getElementById('sectionOrderModal').classList.add('hidden');
+            document.getElementById('sectionOrderModal').classList.remove('flex');
+        }
+
+        function saveSectionOrder() {
+            const studentId = document.getElementById('secOrderStudent').value;
+            const type = document.getElementById('secOrderType').value;
+            const paid = document.getElementById('secOrderPaid').value;
+            const price = parseFloat(document.getElementById('secOrderPrice').value) || 0;
+
+            if (!studentId || !type) {
+                alert("Veuillez sélectionner un élève et un type de vêtement.");
+                return;
+            }
+
+            const student = state.sectionStudents.find(s => s.id === parseInt(studentId));
+            if (!student) return;
+
+            let taille = '-';
+            if (['T-shirt', 'Sweat'].includes(type)) {
+                taille = student.tailleHaut || 'Non précisé';
+            } else if (['Short', 'Jogging'].includes(type)) {
+                taille = student.tailleBas || 'Non précisé';
+            } else if (type === 'Gourde') {
+                taille = 'N/A';
+            }
+
+            const newOrder = {
+                id: Date.now(),
+                studentId: student.id,
+                studentName: student.nom.toUpperCase() + ' ' + student.prenom,
+                type: type,
+                taille: taille,
+                paid: paid,
+                price: price,
+                received: false,
+                date: new Date().toISOString()
+            };
+
+            if (!state.sectionOrders) state.sectionOrders = [];
+            state.sectionOrders.push(newOrder);
+
+            saveAppState();
+            closeSectionOrderModal();
+            renderSectionOrders();
+        }
+
+        function renderSectionOrders() {
+            const tbody = document.getElementById('sectionOrdersTableBody');
+            if (!tbody) return;
+
+            if (!state.sectionOrders || state.sectionOrders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-[color:var(--text-muted)] italic">Aucune commande enregistrée</td></tr>';
+                return;
+            }
+
+            // Trier par date d'ajout (le plus récent en premier) ou par élève
+            const sortedOrders = [...state.sectionOrders].reverse();
+
+            tbody.innerHTML = sortedOrders.map(order => {
+                const paidBadge = order.paid === 'Oui'
+                    ? `<span class="px-2 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700">Oui (${order.price}€)</span>`
+                    : `<span class="px-2 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700">Non</span>`;
+
+                const statusBadge = order.received
+                    ? `<button onclick="toggleOrderReceived(${order.id})" class="px-2 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 hover:bg-emerald-200 transition-colors flex items-center justify-center gap-1 mx-auto w-24"><i data-lucide="check" size="12"></i> Reçu</button>`
+                    : `<button onclick="toggleOrderReceived(${order.id})" class="px-2 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-700 hover:bg-amber-200 transition-colors flex items-center justify-center gap-1 mx-auto w-24"><i data-lucide="clock" size="12"></i> En attente</button>`;
+
+                return `
+                <tr class="hover:bg-[var(--secondary)] transition-colors border-b border-[var(--border)] last:border-0">
+                    <td class="px-6 py-4 font-bold text-[color:var(--text-main)]">${order.studentName}</td>
+                    <td class="px-6 py-4 font-bold text-slate-700">${order.type}</td>
+                    <td class="px-6 py-4 text-center text-slate-500 font-bold">${order.taille}</td>
+                    <td class="px-6 py-4 text-center">${paidBadge}</td>
+                    <td class="px-6 py-4 text-center">${statusBadge}</td>
+                    <td class="px-6 py-4 text-right">
+                        <button onclick="deleteSectionOrder(${order.id})" class="p-1.5 text-slate-400 hover:text-red-500 transition-colors bg-slate-50 hover:bg-red-50 rounded-lg">
+                            <i data-lucide="trash-2" size="16"></i>
+                        </button>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function toggleOrderReceived(id) {
+            const order = state.sectionOrders.find(o => o.id === id);
+            if (order) {
+                order.received = !order.received;
+                saveAppState();
+                renderSectionOrders();
+            }
+        }
+
+        function deleteSectionOrder(id) {
+            if (confirm("Êtes-vous sûr de vouloir supprimer cette commande ?")) {
+                state.sectionOrders = state.sectionOrders.filter(o => o.id !== id);
+                saveAppState();
+                renderSectionOrders();
+            }
+        }
+
+        function exportSectionOrdersToExcel() {
+            // OBSOLETE: remplacé par exportSectionFinalOrderToExcel
+        }
+
+        function openSectionFinalOrderModal() {
+            // Calculer les agrégats depuis state.sectionOrders
+            const agg = {};
+            // Initialiser les catégories
+            const types = ['T-shirt', 'Sweat', 'Short', 'Jogging'];
+            const sizes = ['S', 'M', 'L', 'XL'];
+            types.forEach(t => {
+                sizes.forEach(s => {
+                    agg[`${t}_${s}`] = 0;
+                });
+            });
+            agg['Gourde_N/A'] = 0;
+
+            if (state.sectionOrders) {
+                state.sectionOrders.forEach(o => {
+                    let key = `${o.type}_${o.taille}`;
+                    if (o.type === 'Gourde') key = 'Gourde_N/A';
+                    if (agg[key] !== undefined) {
+                        agg[key]++;
+                    } else {
+                        agg[key] = (agg[key] || 0) + 1;
+                    }
+                });
+            }
+
+            const container = document.getElementById('secFinalOrderItems');
+
+            let html = '<div class="space-y-6">';
+            types.forEach(t => {
+                html += `<div>
+                    <div class="flex items-center justify-between mb-3 border-b pb-1">
+                        <h3 class="font-bold text-slate-700">${t}</h3>
+                        <div class="flex items-center gap-2">
+                            <input type="number" id="price_${t}" placeholder="Prix U." min="0" step="0.01" class="w-20 h-8 text-sm bg-slate-50 border border-slate-200 text-slate-800 rounded px-2 outline-none focus:border-blue-500 font-bold" oninput="calculateSectionFinalOrderTotal()">
+                            <span class="text-sm font-bold text-slate-600">€</span>
+                            <span class="text-sm font-bold text-blue-600 ml-2 min-w-[3rem] text-right" id="total_${t}">0€</span>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-4 gap-4">
+                        ${sizes.map(s => `
+                            <div>
+                                <label class="text-xs font-bold text-slate-500 block mb-1">Taille ${s}</label>
+                                <input type="number" id="final_${t}_${s}" min="0" value="${agg[`${t}_${s}`] || 0}" oninput="calculateSectionFinalOrderTotal()"
+                                    class="w-full h-10 bg-white border border-slate-200 text-slate-800 rounded-lg px-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm text-center font-bold">
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`;
+            });
+
+            // Gourde
+            html += `<div>
+                <div class="flex items-center justify-between mb-3 border-b pb-1">
+                    <h3 class="font-bold text-slate-700">Gourde</h3>
+                    <div class="flex items-center gap-2">
+                        <input type="number" id="price_Gourde" placeholder="Prix U." min="0" step="0.01" class="w-20 h-8 text-sm bg-slate-50 border border-slate-200 text-slate-800 rounded px-2 outline-none focus:border-blue-500 font-bold" oninput="calculateSectionFinalOrderTotal()">
+                        <span class="text-sm font-bold text-slate-600">€</span>
+                        <span class="text-sm font-bold text-blue-600 ml-2 min-w-[3rem] text-right" id="total_Gourde">0€</span>
+                    </div>
+                </div>
+                <div class="w-1/4">
+                    <label class="text-xs font-bold text-slate-500 block mb-1">Quantité</label>
+                    <input type="number" id="final_Gourde_NA" min="0" value="${agg['Gourde_N/A'] || 0}" oninput="calculateSectionFinalOrderTotal()"
+                        class="w-full h-10 bg-white border border-slate-200 text-slate-800 rounded-lg px-3 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 shadow-sm text-center font-bold">
+                </div>
+            </div>`;
+
+            html += `<div class="mt-6 pt-4 border-t border-slate-200 flex justify-end items-center gap-4">
+                <span class="text-lg font-bold text-slate-700">TOTAL COMMANDE :</span>
+                <span class="text-2xl font-bold text-blue-600" id="grandTotalFinalOrder">0€</span>
+            </div>`;
+
+            html += '</div>';
+            container.innerHTML = html;
+
+            const footer = document.getElementById('secFinalOrderFooter');
+            footer.innerHTML = `
+                <button onclick="closeSectionFinalOrderModal()" class="px-5 py-2.5 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 transition-colors">Annuler</button>
+                <button onclick="saveSectionFinalOrder()" class="px-5 py-2.5 rounded-xl font-bold text-white bg-blue-500 hover:bg-blue-600 transition-colors shadow-md flex items-center gap-2">
+                    <i data-lucide="check" size="18"></i> Valider la commande
+                </button>
+            `;
+
+            document.getElementById('sectionFinalOrderModal').classList.remove('hidden');
+            document.getElementById('sectionFinalOrderModal').classList.add('flex');
+            lucide.createIcons();
+
+            // Initialiser les totaux à zéro
+            calculateSectionFinalOrderTotal();
+        }
+
+        function calculateSectionFinalOrderTotal() {
+            const types = ['T-shirt', 'Sweat', 'Short', 'Jogging'];
+            const sizes = ['S', 'M', 'L', 'XL'];
+            let grandTotal = 0;
+
+            types.forEach(t => {
+                let typeQty = 0;
+                sizes.forEach(s => {
+                    const input = document.getElementById(`final_${t}_${s}`);
+                    if (input) typeQty += (parseInt(input.value) || 0);
+                });
+
+                const priceInput = document.getElementById(`price_${t}`);
+                const price = priceInput ? parseFloat(priceInput.value) || 0 : 0;
+                const typeTotal = typeQty * price;
+
+                const totalSpan = document.getElementById(`total_${t}`);
+                if (totalSpan) totalSpan.textContent = typeTotal + '€';
+
+                grandTotal += typeTotal;
+            });
+
+            // Gourde
+            const gInput = document.getElementById('final_Gourde_NA');
+            const gQty = gInput ? (parseInt(gInput.value) || 0) : 0;
+            const gPriceInput = document.getElementById('price_Gourde');
+            const gPrice = gPriceInput ? parseFloat(gPriceInput.value) || 0 : 0;
+            const gTotal = gQty * gPrice;
+
+            const gTotalSpan = document.getElementById('total_Gourde');
+            if (gTotalSpan) gTotalSpan.textContent = gTotal + '€';
+
+            grandTotal += gTotal;
+
+            const grandTotalSpan = document.getElementById('grandTotalFinalOrder');
+            if (grandTotalSpan) grandTotalSpan.textContent = grandTotal + '€';
+        }
+
+        function closeSectionFinalOrderModal() {
+            document.getElementById('sectionFinalOrderModal').classList.add('hidden');
+            document.getElementById('sectionFinalOrderModal').classList.remove('flex');
+        }
+
+        function saveSectionFinalOrder() {
+            const types = ['T-shirt', 'Sweat', 'Short', 'Jogging'];
+            const sizes = ['S', 'M', 'L', 'XL'];
+
+            const items = [];
+            types.forEach(t => {
+                const priceInput = document.getElementById(`price_${t}`);
+                const price = priceInput ? parseFloat(priceInput.value) || 0 : 0;
+                sizes.forEach(s => {
+                    const el = document.getElementById(`final_${t}_${s}`);
+                    if (el && parseInt(el.value) > 0) {
+                        items.push({ type: t, taille: s, qty: parseInt(el.value), price: price });
+                    }
+                });
+            });
+            const gPriceInput = document.getElementById('price_Gourde');
+            const gPrice = gPriceInput ? parseFloat(gPriceInput.value) || 0 : 0;
+            const g = document.getElementById('final_Gourde_NA');
+            if (g && parseInt(g.value) > 0) {
+                items.push({ type: 'Gourde', taille: 'N/A', qty: parseInt(g.value), price: gPrice });
+            }
+
+            const total = items.reduce((acc, curr) => acc + (curr.qty * (curr.price || 0)), 0);
+
+            const newFinalOrder = {
+                id: Date.now(),
+                date: new Date().toISOString(),
+                items: items,
+                total: total
+            };
+
+            if (!state.sectionFinalOrders) state.sectionFinalOrders = [];
+            state.sectionFinalOrders.push(newFinalOrder);
+
+            saveAppState();
+            closeSectionFinalOrderModal();
+            renderSectionFinalOrders();
+        }
+
+        function renderSectionFinalOrders() {
+            const container = document.getElementById('sectionFinalOrdersContainer');
+            if (!container) return;
+
+            if (!state.sectionFinalOrders || state.sectionFinalOrders.length === 0) {
+                container.innerHTML = '';
+                return;
+            }
+
+            // Trier par date la plus récente
+            const sorted = [...state.sectionFinalOrders].reverse();
+
+            container.innerHTML = sorted.map(fo => {
+                const d = new Date(fo.date).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                return `
+                <button onclick="viewSectionFinalOrder(${fo.id})" class="w-full bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-xl p-4 text-left transition-all flex justify-between items-center group">
+                    <div>
+                        <h4 class="font-bold text-slate-800 group-hover:text-blue-700">Commande globale du ${d}</h4>
+                        <p class="text-sm text-slate-500">${fo.items.reduce((acc, curr) => acc + curr.qty, 0)} articles au total - <span class="font-bold text-blue-600">${fo.total || 0}€</span></p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <span class="text-blue-500 text-sm font-bold flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">Visualiser <i data-lucide="chevron-right" size="16"></i></span>
+                        <div class="p-2 bg-white rounded-lg shadow-sm group-hover:shadow text-slate-400 group-hover:text-blue-500">
+                            <i data-lucide="eye" size="20"></i>
+                        </div>
+                    </div>
+                </button>
+                `;
+            }).join('');
+            lucide.createIcons();
+        }
+
+        function viewSectionFinalOrder(id) {
+            const fo = state.sectionFinalOrders.find(o => o.id === id);
+            if (!fo) return;
+
+            let detailHtml = '<div class="space-y-4">';
+
+            const types = ['T-shirt', 'Sweat', 'Short', 'Jogging', 'Gourde'];
+            types.forEach(t => {
+                const itemsOfType = fo.items.filter(i => i.type === t);
+                if (itemsOfType.length > 0) {
+                    const typePrice = itemsOfType[0].price || 0;
+                    const typeQty = itemsOfType.reduce((acc, curr) => acc + curr.qty, 0);
+                    const typeTotal = typeQty * typePrice;
+                    detailHtml += `<div><h4 class="font-bold text-slate-700 border-b pb-1 mb-2 flex justify-between"><span>${t}</span><span class="text-blue-600">${typeTotal}€ <span class="text-xs text-slate-400 font-normal">(${typeQty}x ${typePrice}€)</span></span></h4><ul class="text-sm text-slate-600 pl-4 list-disc">`;
+                    itemsOfType.forEach(i => {
+                        detailHtml += `<li>Taille ${i.taille} : <span class="font-bold text-slate-800">${i.qty}</span></li>`;
+                        // Hidden inputs for export
+                        detailHtml += `<input type="hidden" id="final_${t === 'Gourde' ? 'Gourde_NA' : t + '_' + i.taille}" value="${i.qty}">`;
+                    });
+                    detailHtml += `</ul></div>`;
+                }
+            });
+
+            detailHtml += `<div class="mt-6 pt-4 border-t border-slate-200 flex justify-end items-center gap-4">
+                <span class="text-lg font-bold text-slate-700">TOTAL COMMANDE :</span>
+                <span class="text-2xl font-bold text-blue-600">${fo.total || 0}€</span>
+            </div>`;
+
+            detailHtml += '</div>';
+
+            const container = document.getElementById('secFinalOrderItems');
+            container.innerHTML = detailHtml;
+
+            const footer = document.getElementById('secFinalOrderFooter');
+            footer.innerHTML = `
+                <button onclick="closeSectionFinalOrderModal()" class="px-5 py-2.5 rounded-xl font-bold text-slate-600 bg-slate-50 hover:bg-slate-100 transition-colors w-full">Fermer</button>
+            `;
+
+            document.getElementById('sectionFinalOrderModal').classList.remove('hidden');
+            document.getElementById('sectionFinalOrderModal').classList.add('flex');
+            lucide.createIcons();
+        }
+
+        function exportSectionFinalOrderToExcel() {
+            const types = ['T-shirt', 'Sweat', 'Short', 'Jogging'];
+            const sizes = ['S', 'M', 'L', 'XL'];
+
+            let csvContent = "data:text/csv;charset=utf-8,\uFEFF";
+            csvContent += "COMMANDE FOURNISSEUR\n\n";
+            csvContent += "Article;Taille;Quantite\n";
+
+            types.forEach(t => {
+                sizes.forEach(s => {
+                    const el = document.getElementById(`final_${t}_${s}`);
+                    if (el && parseInt(el.value) > 0) {
+                        csvContent += `${t};${s};${el.value}\n`;
+                    }
+                });
+            });
+            const g = document.getElementById('final_Gourde_NA');
+            if (g && parseInt(g.value) > 0) {
+                csvContent += `Gourde;N/A;${g.value}\n`;
+            }
+
+            csvContent += "\n\n";
+            csvContent += "LISTE DETAILLEE DES PRE-COMMANDES ELEVES\n";
+            csvContent += "Eleve;Article;Taille;Paye;Montant;Recu\n";
+            if (state.sectionOrders) {
+                state.sectionOrders.forEach(o => {
+                    csvContent += `${o.studentName};${o.type};${o.taille};${o.paid};${o.price};${o.received ? 'Oui' : 'Non'}\n`;
+                });
+            }
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            const dateStr = new Date().toISOString().split('T')[0];
+            link.setAttribute("download", `Commandes_Section_Sportive_${dateStr}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
     </script>
